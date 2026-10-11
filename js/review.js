@@ -45,7 +45,7 @@ function session(due) {
     if (!queue.length) return startScreen(`Сессия завершена: с первого раза ${right} из ${due.length}.`);
     const ch = queue.shift();
     const first = !graded.has(ch);
-    // Знак, который уже удалось узнать, иногда просится написать по памяти.
+    // Знак, который уже удалось узнать, иногда предлагается написать по памяти.
     const write = first && load().cards[ch].box >= 2 && Math.random() < 0.5;
     const result = (ok) => {
       if (first) {

@@ -35,7 +35,7 @@ for (const el of document.querySelectorAll('[data-stroke-types]')) el.append(awa
 
 for (const el of document.querySelectorAll('[data-frames]')) el.replaceWith(await framesStrip(el.dataset.frames));
 
-// <ul data-words><li data-hz="大人" data-py="dà rén">взрослый</li></ul>
+// <ul data-words><li data-hz="大人" data-py="dàrén">взрослый</li></ul>
 for (const el of document.querySelectorAll('[data-words]')) {
   el.replaceWith(wordList([...el.children].map((li) => [li.dataset.hz, li.dataset.py, li.textContent.trim()])));
 }
