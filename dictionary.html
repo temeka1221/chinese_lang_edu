@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Словарь · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/course.css">
+  <script src="vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="js/dictionary.js"></script>
+</head>
+<body>
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main>
+    <header>
+      <h1>Словарь</h1>
+      <p>Все иероглифы этапа по урокам. Поиск понимает сам знак, пиньинь без тонов (<i>ren</i>, <i>lu</i>) и русское значение. Клик по знаку открывает карточку с тренажером.</p>
+      <input class="search" type="search" placeholder="人, ren, человек" aria-label="Поиск по словарю" data-search>
+    </header>
+    <div data-list></div>
+  </main>
+</body>
+</html>

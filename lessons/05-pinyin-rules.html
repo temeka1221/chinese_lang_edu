@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 5 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="05">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>знак тона ставится на нужную гласную без подсказки;</li>
+        <li>понятно, почему 你好 звучит как <span class="py">ní hǎo</span>;</li>
+        <li>不 и 一 читаются с правильным тоном;</li>
+        <li>получается написать первую фразу: 你好!</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char" data-from="earlier" data-count="4" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>y и w: подставка для слога</h2>
+      <p>Слог не начинается с «голых» <i>i</i>, <i>u</i>, <i>ü</i>: перед ними пишутся <b>y</b> или <b>w</b>. Звук от этого не меняется.</p>
+      <ul>
+        <li><i>i</i> → <b>yi</b>, <i>ia</i> → <b>ya</b>, <i>ie</i> → <b>ye</b>: 一 <span class="py">yī</span>, 也 <span class="py">yě</span>;</li>
+        <li><i>u</i> → <b>wu</b>, <i>uo</i> → <b>wo</b>: 五 <span class="py">wǔ</span>, 我 <span class="py">wǒ</span>;</li>
+        <li><i>ü</i> → <b>yu</b>: 鱼 <span class="py">yú</span> «рыба».</li>
+      </ul>
+      <aside class="note analogy">
+        <p>y и w — как подставка под вазу: сами по себе ничего не значат, но без них слог «падает» и сливается с соседним.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Куда пропадают точки над ü</h2>
+      <p>После <i>j, q, x</i> и <i>y</i> точки над ü не пишут: <span class="py">jù</span>, <span class="py">qù</span>, <span class="py">xué</span>, <span class="py">yú</span>. Звук все равно ü: после мягких j q x простое «у» вообще не встречается, так что спутать нельзя.</p>
+      <p>После <i>n</i> и <i>l</i> точки остаются, потому что там возможны оба звука: 女 <span class="py">nǚ</span> «женщина» и 努 <span class="py">nǔ</span> «стараться», 绿 <span class="py">lǜ</span> «зеленый» и 路 <span class="py">lù</span> «дорога».</p>
+      <aside class="note trap">
+        <p><i>qu</i> читается не «ку», а «цю», <i>xu</i> — «сю», <i>ju</i> — «цзю». Если после j q x стоит u, это всегда ü.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Сокращения iu, ui, un</h2>
+      <p>Три финали пишутся короче, чем звучат: средняя гласная в записи пропадает, но в речи слышна.</p>
+      <ul>
+        <li><b>iu</b> = i(o)u: 六 <span class="py">liù</span> звучит как «лиоу»;</li>
+        <li><b>ui</b> = u(e)i: 贵 <span class="py">guì</span> звучит как «гуэй»;</li>
+        <li><b>un</b> = u(e)n: 顿 <span class="py">dùn</span> звучит как «дуэнь».</li>
+      </ul>
+      <p>Звучание: <button class="say" type="button" data-say="liu4">liù</button> <button class="say" type="button" data-say="gui4">guì</button> <button class="say" type="button" data-say="dun4">dùn</button></p>
+    </section>
+
+    <section>
+      <h2>Куда ставится знак тона</h2>
+      <aside class="note rule">
+        <p>Знак всегда стоит над гласной. Если гласных несколько:</p>
+        <ol>
+          <li>есть <b>a</b> или <b>e</b> — знак над ней: <span class="py">hǎo</span>, <span class="py">xiè</span>, <span class="py">mài</span>;</li>
+          <li>есть сочетание <b>ou</b> — знак над <i>o</i>: <span class="py">dōu</span>, <span class="py">kǒu</span>;</li>
+          <li>иначе знак над последней гласной: <span class="py">guó</span>, <span class="py">liù</span>, <span class="py">guì</span>.</li>
+        </ol>
+      </aside>
+      <aside class="note analogy">
+        <p>Гласные выстраиваются по старшинству: <i>a</i> — генерал, <i>e</i> и <i>o</i> — полковники, <i>i</i>, <i>u</i>, <i>ü</i> — рядовые. Знак тона, как орден, достается старшему. Если старшего нет, орден получает тот, кто стоит в строю последним.</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Как правильно записать слог hao третьего тона?</p>
+        <ol><li>hǎǒ</li><li>hǎo</li><li>haǒ</li></ol>
+        <p class="why">В слоге есть <i>a</i>, значит, знак над ней: <span class="py">hǎo</span>.</p>
+      </div>
+      <div class="check" data-answer="3">
+        <p>Как правильно записать слог gui четвертого тона?</p>
+        <ol><li>gùi</li><li>guǐ</li><li>guì</li></ol>
+        <p class="why">Ни <i>a</i>, ни <i>e</i>, ни <i>ou</i> нет, поэтому знак над последней гласной: <span class="py">guì</span>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Апостроф</h2>
+      <p>Если слог внутри слова начинается с <i>a</i>, <i>o</i> или <i>e</i>, перед ним ставится апостроф, иначе граница слогов потеряется. 西安 <span class="py">Xī'ān</span> — город Сиань, два слога. 先 <span class="py">xiān</span> «сначала» — один слог. Без апострофа их не различить.</p>
+    </section>
+
+    <section>
+      <h2>Тоны меняются: 3 + 3</h2>
+      <p>Если подряд идут два третьих тона, первый произносится вторым. 你好 пишется <span class="py">nǐ hǎo</span>, а звучит <span class="py">ní hǎo</span>. В записи знаки не меняются, меняется только произношение.</p>
+      <p>Звучание по слогам носителя: <button class="say" type="button" data-say="ni2 hao3">ní hǎo</button>, для сравнения без изменения: <button class="say" type="button" data-say="ni3 hao3">nǐ hǎo</button></p>
+      <aside class="note analogy">
+        <p>Две ямы подряд на дороге не проехать, приходится перепрыгнуть первую. Голос делает то же самое: вместо двух провалов первый слог подпрыгивает вверх.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Капризные 不 и 一</h2>
+      <p>不 <span class="py">bù</span> «не» перед четвертым тоном превращается в <span class="py">bú</span>: 不是 <span class="py">bú shì</span>, 不大 <span class="py">bú dà</span>. Перед остальными тонами остается <span class="py">bù</span>: 不好 <span class="py">bù hǎo</span>.</p>
+      <p>一 <span class="py">yī</span> «один» меняется сильнее:</p>
+      <ul>
+        <li>отдельно, при счете и в номерах — <span class="py">yī</span>: 一, 十一, 第一;</li>
+        <li>перед четвертым тоном — <span class="py">yí</span>: 一个 <span class="py">yí ge</span>;</li>
+        <li>перед первым, вторым и третьим — <span class="py">yì</span>: 一天 <span class="py">yì tiān</span>, 一百 <span class="py">yìbǎi</span>.</li>
+      </ul>
+      <aside class="note analogy">
+        <p>Два резких удара вниз подряд выговорить трудно, поэтому 不 и 一 перед четвертым тоном взлетают вверх, как ступенька перед прыжком.</p>
+      </aside>
+      <aside class="note rule">
+        <p>Учебники HSK, как и этот курс, отмечают измененный тон у 不 и 一 прямо в записи (<span class="py">bú shì</span>, <span class="py">yí ge</span>), а изменение 3 + 3 — нет: <span class="py">nǐ hǎo</span>.</p>
+      </aside>
+      <div class="check" data-answer="1">
+        <p>Как звучит 不 в слове 不是?</p>
+        <ol><li>bú</li><li>bù</li><li>bǔ</li></ol>
+        <p class="why">是 <span class="py">shì</span> — четвертый тон, поэтому 不 перед ним звучит вторым: <span class="py">bú shì</span>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Легкий тон</h2>
+      <p>Некоторые слоги теряют тон и звучат коротко и легко: частицы 吗 <span class="py">ma</span> и 的 <span class="py">de</span>, суффикс 们 <span class="py">men</span>, вторые слоги в 妈妈 <span class="py">māma</span>, 谢谢 <span class="py">xièxie</span>. В пиньине у них нет знака тона.</p>
+    </section>
+
+    <section>
+      <h2>Новые иероглифы</h2>
+      <p>Три знака урока складываются в первую фразу. 好 собран из уже знакомых 女 и 子, а 你 — из «человека» и древнего «ты».</p>
+      <div data-cards></div>
+    </section>
+
+    <section>
+      <h2>Первые фразы</h2>
+      <ul data-words>
+        <li data-hz="你好" data-py="nǐ hǎo">здравствуй, здравствуйте</li>
+        <li data-hz="不好" data-py="bù hǎo">нехорошо, плохо</li>
+        <li data-hz="不大" data-py="bú dà">небольшой</li>
+        <li data-hz="好人" data-py="hǎorén">хороший человек</li>
+        <li data-hz="大好" data-py="dàhǎo">прекрасный, отличный</li>
+      </ul>
+      <aside class="note culture">
+        <p>你好 — универсальное «здравствуйте», но между близкими его говорят редко: друзьям просто кивают или спрашивают «Поел?» — 吃了吗？ <span class="py">Chī le ma?</span> Это не приглашение к столу, а дружеское приветствие.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Практика</h2>
+      <div data-exercises="meaning char pinyin order write" data-count="9"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Перед <i>i, u, ü</i> в начале слога пишутся y и w. Точки над ü пропадают после j q x y.</li>
+        <li>iu, ui, un — сокращения, средняя гласная слышна.</li>
+        <li>Знак тона: на a или e, в ou — на o, иначе на последнюю гласную.</li>
+        <li>3 + 3 → 2 + 3: 你好 звучит <span class="py">ní hǎo</span>. 不 и 一 перед четвертым тоном взлетают во второй.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

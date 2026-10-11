@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 11 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="11">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>получается рассказать, сколько человек в семье и кто они;</li>
+        <li>получается сказать «у меня есть» и «у меня нет»;</li>
+        <li>получается написать 家 有 爸 和 这 儿.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char order" data-from="earlier" data-count="5" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>Кто есть кто в семье</h2>
+      <p>В китайском нет общих слов «брат» и «сестра»: всегда уточняется, старше или младше. Порядок рождения в китайской семье так же важен, как звания в армии.</p>
+      <ul data-words>
+        <li data-hz="爸爸" data-py="bàba">папа</li>
+        <li data-hz="妈妈" data-py="māma">мама</li>
+        <li data-hz="哥哥" data-py="gēge">старший брат</li>
+        <li data-hz="姐姐" data-py="jiějie">старшая сестра</li>
+        <li data-hz="弟弟" data-py="dìdi">младший брат</li>
+        <li data-hz="妹妹" data-py="mèimei">младшая сестра</li>
+        <li data-hz="儿子" data-py="érzi">сын</li>
+        <li data-hz="女儿" data-py="nǚ'ér">дочь</li>
+      </ul>
+      <aside class="note analogy">
+        <p>Слова родства удваиваются, как в детской речи: «ма-ма», «па-па». 哥哥, 姐姐, 弟弟, 妹妹 — тот же прием, а второй слог звучит легко. Сестры, кстати, обе с ключом 女, а младший брат 弟 похож на веревку, намотанную по порядку: 弟 и значит «следующий по порядку».</p>
+      </aside>
+      <aside class="note culture">
+        <p>С 1980 по 2015 год в Китае действовала политика «одна семья — один ребенок». У многих китайцев этого поколения нет родных братьев и сестер, поэтому 哥哥 и 姐姐 часто называют двоюродных и просто старших друзей.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Сколько ртов в доме</h2>
+      <p>Вопрос о размере семьи звучит так: 你家有几口人？ — «Сколько ртов в твоем доме?» Счетное слово для членов семьи — 口 «рот», как в старину считали едоков за столом.</p>
+      <ul data-words>
+        <li data-hz="你家有几口人？" data-py="Nǐ jiā yǒu jǐ kǒu rén?">Сколько человек в твоей семье?</li>
+        <li data-hz="我家有三口人。" data-py="Wǒ jiā yǒu sān kǒu rén.">В моей семье три человека.</li>
+        <li data-hz="爸爸、妈妈和我。" data-py="Bàba, māma hé wǒ.">Папа, мама и я.</li>
+      </ul>
+      <aside class="note rule">
+        <p>В перечислениях китайцы ставят особую запятую 、 — «капельку» вместо обычной: 爸爸、妈妈和我. Перед последним словом — 和 «и».</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Есть и нет: 有 и 没有</h2>
+      <p>有 <span class="py">yǒu</span> — «иметь, есть»: 我有哥哥 «у меня есть старший брат». Отрицание — 没有 <span class="py">méiyǒu</span>: 我没有姐姐 «у меня нет старшей сестры».</p>
+      <aside class="note trap">
+        <p>С 有 не работает обычное 不: «нет» для 有 всегда 没有, никогда не 不有. Это единственное исключение среди глаголов первого этапа.</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Как сказать «У меня нет младшего брата»?</p>
+        <ol><li>我不有弟弟。</li><li>我没有弟弟。</li><li>我有不弟弟。</li></ol>
+        <p class="why">Отрицание для 有 — 没有: 我没有弟弟.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Это мой папа: 这是…</h2>
+      <p>这 <span class="py">zhè</span> — «это»: 这是我爸爸 «Это мой папа». С близкими родственниками «мой» обходится без связки: 我爸爸, 我妈妈, 我家.</p>
+      <aside class="note analogy">
+        <p>这 и 那 — как «вот» и «вон»: 这 — то, что рядом, под рукой, 那 <span class="py">nà</span> — то, что подальше.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Диалог: семейная фотография</h2>
+      <ul data-words>
+        <li data-hz="这是你爸爸吗？" data-py="Zhè shì nǐ bàba ma?">Это твой папа?</li>
+        <li data-hz="是，这是我爸爸。" data-py="Shì, zhè shì wǒ bàba.">Да, это мой папа.</li>
+        <li data-hz="你有哥哥吗？" data-py="Nǐ yǒu gēge ma?">У тебя есть старший брат?</li>
+        <li data-hz="我没有哥哥，我有一个妹妹。" data-py="Wǒ méiyǒu gēge, wǒ yǒu yí ge mèimei.">У меня нет старшего брата, у меня есть младшая сестра.</li>
+        <li data-hz="你家有几口人？" data-py="Nǐ jiā yǒu jǐ kǒu rén?">Сколько человек в твоей семье?</li>
+        <li data-hz="四口人：爸爸、妈妈、妹妹和我。" data-py="Sì kǒu rén: bàba, māma, mèimei hé wǒ.">Четыре: папа, мама, младшая сестра и я.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Новые иероглифы</h2>
+      <div data-cards></div>
+    </section>
+
+    <section>
+      <h2>Слова из знакомых знаков</h2>
+      <ul data-words>
+        <li data-hz="家人" data-py="jiārén">родные, члены семьи</li>
+        <li data-hz="我家" data-py="wǒ jiā">моя семья, мой дом</li>
+        <li data-hz="有人" data-py="yǒu rén">кто-то есть; занято</li>
+        <li data-hz="这个" data-py="zhège">этот</li>
+        <li data-hz="儿子" data-py="érzi">сын</li>
+        <li data-hz="大家" data-py="dàjiā">все («большая семья»)</li>
+      </ul>
+      <aside class="note culture">
+        <p>大家 <span class="py">dàjiā</span> — «все», буквально «большая семья». Так обращаются к группе людей: 大家好！ «Всем привет!»</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Практика</h2>
+      <div data-exercises="meaning char pinyin order write" data-count="12"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Братья и сестры всегда старшие или младшие: 哥哥, 姐姐, 弟弟, 妹妹.</li>
+        <li>你家有几口人？ — члены семьи считаются «ртами» 口.</li>
+        <li>有 «есть», 没有 «нет». 这是… «Это…».</li>
+        <li>Изучены знаки 家 有 爸 和 这 儿.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

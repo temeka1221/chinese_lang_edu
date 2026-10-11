@@ -1,0 +1,511 @@
+/* Китайский с нуля: общие стили */
+
+:root {
+  --bg: #f7f3ea;
+  --paper: #fffdf8;
+  --ink: #22201c;
+  --muted: #6f675c;
+  --line: #e5dccb;
+  --accent: #c8302c;
+  --accent-soft: #fbe8e5;
+  --radical: #1d7a8a;
+  --outline: #e1d8c8;
+  --trace: #f0b4ad;
+  --arrow: #ffffff;
+  --ok: #1e7d3c;
+  --ok-soft: #e2f3e6;
+  --bad: #c8302c;
+  --bad-soft: #fbe8e5;
+  --t1: #d42a2a;
+  --t2: #1e8a3e;
+  --t3: #1f5fcf;
+  --t4: #8a2fd6;
+  --t5: #7a7468;
+  --grid-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 0V100M0 50H100M0 0L100 100M100 0L0 100' fill='none' stroke='%23e9b3ac' stroke-width='1' stroke-dasharray='3 3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  --grid-border: #e2a29a;
+  --shadow: 0 1px 2px rgb(60 40 20 / 6%), 0 6px 20px rgb(60 40 20 / 6%);
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-zh: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  --font-kai: "KaiTi", "STKaiti", "Kaiti SC", "AR PL UKai CN", "Noto Serif CJK SC", serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161412;
+    --paper: #201d1a;
+    --ink: #f1ece3;
+    --muted: #a99f92;
+    --line: #37322b;
+    --accent: #ff6f61;
+    --accent-soft: #3b211d;
+    --radical: #5cc6d8;
+    --outline: #3d3832;
+    --trace: #6e3c36;
+    --arrow: #201d1a;
+    --ok: #63cc85;
+    --ok-soft: #173020;
+    --bad: #ff6f61;
+    --bad-soft: #3b211d;
+    --t1: #ff6b6b;
+    --t2: #5ad17f;
+    --t3: #6fa6ff;
+    --t4: #c491ff;
+    --t5: #9d968a;
+    --grid-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M50 0V100M0 50H100M0 0L100 100M100 0L0 100' fill='none' stroke='%235e3a35' stroke-width='1' stroke-dasharray='3 3' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    --grid-border: #6e413b;
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 20px rgb(0 0 0 / 25%);
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.6 var(--font);
+}
+
+[lang="zh-CN"], .zh { font-family: var(--font-zh); }
+
+a { color: var(--accent); }
+
+button { font: inherit; color: inherit; }
+
+h1, h2, h3, h4 { line-height: 1.25; }
+
+.muted { color: var(--muted); }
+
+[hidden] { display: none !important; }
+
+/* Тоны */
+.t1 { color: var(--t1); }
+.t2 { color: var(--t2); }
+.t3 { color: var(--t3); }
+.t4 { color: var(--t4); }
+.t5 { color: var(--t5); }
+
+/* Предупреждение, если страница открыта без сервера и модули не загрузились */
+.needs-server {
+  margin: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+}
+html.ready .needs-server { display: none; }
+
+/* Шапка сайта */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 650; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-kai);
+  font-size: 22px;
+}
+.topbar-links { display: flex; gap: 4px; flex-wrap: wrap; }
+.topbar-links a { padding: 6px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 15px; }
+.topbar-links a:hover { color: var(--ink); background: var(--bg); }
+.topbar-links a[aria-current="page"] { color: var(--ink); background: var(--accent-soft); }
+
+/* Раскладка */
+main { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
+main > section, main > header { margin-bottom: 40px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 550;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { filter: brightness(1.07); }
+
+/* Урок */
+.lesson-head { padding: 24px; border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+.lesson-kicker { margin: 0; color: var(--muted); font-size: 15px; }
+.lesson-head h1 { margin: 4px 0 2px; font-size: clamp(28px, 5vw, 38px); }
+.lesson-no { display: block; color: var(--accent); font-size: 17px; font-weight: 600; letter-spacing: 0.02em; }
+.lesson-meta { margin: 0 0 12px; color: var(--muted); }
+.goals { margin: 0; padding-left: 22px; }
+.goals-title { margin: 12px 0 4px; font-weight: 600; }
+
+main h2 { margin: 0 0 12px; font-size: 26px; }
+main h3 { margin: 28px 0 8px; font-size: 20px; }
+
+.big-zh { font-family: var(--font-kai); font-size: 64px; line-height: 1.2; text-align: center; }
+.big-zh .hz { border-bottom: 0; }
+.hz { cursor: pointer; border-bottom: 1px dotted var(--muted); }
+.hz:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 16px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.table-wrap { overflow-x: auto; }
+.big-cell { font-family: var(--font-kai); font-size: 30px; line-height: 1.2; }
+.big-cell .hz { border-bottom: 0; }
+
+/* Врезки */
+.note {
+  position: relative;
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--line);
+  border-radius: 0 10px 10px 0;
+  background: var(--paper);
+}
+.note > :first-child { margin-top: 0; }
+.note > :last-child { margin-bottom: 0; }
+.note h4 { margin: 0 0 4px; font-size: 15px; letter-spacing: 0.02em; }
+aside.note::before { display: block; margin-bottom: 4px; font-weight: 650; font-size: 15px; }
+.note.analogy, .note.mnemonic { border-color: #e2a400; }
+.note.trap { border-color: var(--accent); }
+.note.history, .note.origin { border-color: #8a6a3d; }
+.note.rule, .note.write { border-color: var(--radical); }
+.note.culture { border-color: #b0399a; }
+aside.note.analogy::before { content: "💡 Аналогия"; }
+aside.note.trap::before { content: "⚠️ Ловушка"; }
+aside.note.history::before { content: "📜 История"; }
+aside.note.rule::before { content: "📏 Правило"; }
+aside.note.culture::before { content: "🏮 Культура"; }
+.note.mnemonic h4::before { content: "💡 "; }
+.note.sound { border-color: var(--t3); }
+.note.sound h4::before { content: "🎵 "; }
+.note ul { margin: 4px 0 0; padding-left: 20px; }
+.note li + li { margin-top: 6px; }
+.note.origin h4::before { content: "📜 "; }
+.note.write h4::before { content: "✍️ "; }
+.note.trap h4::before { content: "⚠️ "; }
+
+/* Мини-проверка в тексте урока */
+.check { margin: 20px 0; padding: 16px; border: 1px dashed var(--line); border-radius: var(--radius); background: var(--paper); }
+.check::before { content: "Мини-проверка"; display: block; margin-bottom: 6px; color: var(--muted); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.check > p:first-of-type { margin-top: 0; font-weight: 600; }
+.big-mark { font-size: 24px; }
+.check .why { display: none; margin: 12px 0 0; color: var(--muted); }
+.check.answered .why { display: block; }
+
+/* Тоны: график и плашки */
+.tone-chart { display: block; width: 100%; max-width: 560px; margin: 8px auto; }
+.tone-chart .lvl path { stroke: var(--line); stroke-dasharray: 4 4; }
+.tone-chart text { fill: var(--muted); font: 600 13px var(--font); text-anchor: middle; }
+.tone-chart .tone-label text { font-size: 14px; }
+.tone-chart .c1, .tone-chart .c2, .tone-chart .c3, .tone-chart .c4 { fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.tone-chart .c1 { stroke: var(--t1); }
+.tone-chart .c2 { stroke: var(--t2); }
+.tone-chart .c3 { stroke: var(--t3); }
+.tone-chart .c4 { stroke: var(--t4); }
+.tone-chart text.f1, .f1 { fill: var(--t1); }
+.tone-chart text.f2, .f2 { fill: var(--t2); }
+.tone-chart text.f3, .f3 { fill: var(--t3); }
+.tone-chart text.f4, .f4 { fill: var(--t4); }
+.tones { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.tone-box { padding: 14px 16px; border-top: 4px solid var(--line); border-radius: 12px; background: var(--paper); }
+.tone-box h3 { margin: 0 0 6px; font-size: 18px; }
+.tone-box p { margin: 6px 0; }
+.tone-box h3 span { font-size: 26px; vertical-align: -3px; }
+.tb1 { border-top-color: var(--t1); }
+.tb2 { border-top-color: var(--t2); }
+.tb3 { border-top-color: var(--t3); }
+.tb4 { border-top-color: var(--t4); }
+.tb5 { border-top-color: var(--t5); }
+.tone-ex { line-height: 2.2; }
+.tone-ex > span { white-space: nowrap; }
+
+/* Варианты ответа */
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
+.option {
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: pointer;
+  text-align: center;
+}
+.option:hover:not(:disabled) { border-color: var(--accent); }
+.option:disabled { cursor: default; }
+.option.ok { border-color: var(--ok); background: var(--ok-soft); }
+.option.bad { border-color: var(--bad); background: var(--bad-soft); }
+.options.chars .option-char { font-family: var(--font-kai); font-size: 40px; line-height: 1.2; }
+.options.pics { grid-template-columns: repeat(auto-fit, minmax(96px, 120px)); justify-content: center; }
+.option-pic { display: block; width: 100%; aspect-ratio: 1; }
+.option-pic svg { display: block; width: 100%; height: 100%; }
+
+/* Кнопка звука */
+.say {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  cursor: pointer;
+  vertical-align: middle;
+  font-size: 15px;
+}
+.say::before { content: "🔊"; font-size: 14px; }
+.say:hover { border-color: var(--accent); }
+
+/* Сетка 米字格 */
+.grid { background: var(--paper) var(--grid-img) center / 100% 100% no-repeat; border: 1.5px solid var(--grid-border); }
+
+/* Карточка иероглифа */
+.cards { display: grid; gap: 24px; }
+.card {
+  display: grid;
+  grid-template-columns: minmax(250px, 320px) 1fr;
+  gap: 24px;
+  padding: 20px;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  scroll-margin-top: 70px;
+}
+.card-head { display: flex; gap: 16px; align-items: center; margin-bottom: 8px; }
+.card-char { font-family: var(--font-kai); font-size: 76px; line-height: 1; }
+.card-py { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 600; }
+.card-meaning { font-size: 20px; }
+.card-facts { color: var(--muted); font-size: 15px; }
+.card .note { background: var(--bg); }
+.card-words h4 { margin: 16px 0 4px; font-size: 15px; }
+
+.words { margin: 0; padding: 0; list-style: none; }
+.words li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.words li:last-child { border-bottom: 0; }
+.word-hz { font-size: 24px; }
+.word-hz .hz { border-bottom: 0; }
+.word-py { font-weight: 600; }
+.word-ru { flex: 1 1 180px; color: var(--muted); }
+
+/* Тренажер черт */
+.viewer { display: grid; gap: 10px; justify-items: center; outline: none; }
+.viewer:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; width: 100%; max-width: 300px; padding: 3px; border-radius: 999px; background: var(--bg); }
+.modes button { padding: 6px 2px; border: 0; border-radius: 999px; background: none; cursor: pointer; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.modes button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow); font-weight: 600; }
+.stage { position: relative; width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 4px; touch-action: none; }
+.stage-svg { display: block; width: 100%; height: 100%; }
+.stage-hw { display: grid; place-items: center; width: 100%; height: 100%; }
+.st-done { fill: var(--ink); }
+.st-todo { fill: var(--outline); }
+.st-current { fill: var(--accent); }
+.st-anim { fill: none; stroke: var(--accent); stroke-width: 200; stroke-linecap: round; stroke-linejoin: round; }
+.st-arrow { fill: none; stroke: var(--arrow); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 34 26; }
+.st-arrowhead { fill: var(--arrow); }
+.num circle { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
+.num text { fill: var(--paper); font: 700 12px var(--font); text-anchor: middle; dominant-baseline: central; }
+.num-current circle { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+.num-current text { fill: #fff; }
+.controls { display: flex; gap: 8px; }
+.ctl { width: 48px; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); cursor: pointer; font-size: 16px; }
+.ctl:hover:not(:disabled) { border-color: var(--accent); }
+.ctl:disabled { opacity: 0.35; cursor: default; }
+.caption { width: 100%; min-height: 72px; font-size: 15px; }
+.caption p { margin: 4px 0 0; }
+.strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.frame { position: relative; width: 44px; height: 44px; padding: 0; border-radius: 3px; cursor: pointer; border-width: 1px; }
+.frame svg { display: block; width: 100%; height: 100%; }
+.frame-no { position: absolute; right: 2px; bottom: 0; font-size: 10px; color: var(--muted); }
+.frame[aria-current] { outline: 2px solid var(--accent); outline-offset: 1px; }
+.inline-strip { display: inline-flex; vertical-align: middle; margin: 2px 4px; }
+.inline-strip .frame { width: 36px; height: 36px; }
+
+/* Справочник черт */
+.stroke-types { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.stroke-type {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: pointer;
+  text-align: left;
+}
+.stroke-type:hover { border-color: var(--accent); }
+.type-pic { display: block; width: 76px; height: 76px; }
+.type-pic svg { display: block; width: 100%; height: 100%; }
+.type-text { display: grid; gap: 2px; font-size: 14px; }
+.type-name { font-size: 18px; font-weight: 650; }
+.type-ru { font-weight: 600; }
+.type-how { color: var(--ink); }
+.type-like { color: var(--muted); }
+
+/* Упражнения */
+.quiz { padding: 20px; border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+.quiz-head { color: var(--muted); font-size: 14px; }
+.quiz-bar { height: 6px; margin: 6px 0 16px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.quiz-bar span { display: block; height: 100%; background: var(--accent); transition: width 0.3s; }
+.quiz-q > p:first-child { margin-top: 0; font-weight: 600; }
+.quiz-char { font-family: var(--font-kai); font-size: 88px; line-height: 1.1; text-align: center; }
+.quiz-pic { width: 160px; height: 160px; margin: 0 auto; }
+.quiz-pic svg { display: block; width: 100%; height: 100%; }
+.quiz-write { width: 260px; max-width: 100%; aspect-ratio: 1; margin: 0 auto 12px; touch-action: none; }
+.quiz-feedback { margin-top: 12px; padding: 12px 16px; border-radius: 12px; }
+.quiz-feedback.ok { background: var(--ok-soft); }
+.quiz-feedback.bad { background: var(--bad-soft); }
+.quiz-feedback > b { display: block; }
+.quiz-feedback .btn { margin-top: 10px; }
+.quiz-note { margin-top: 4px; }
+.quiz-note-char { font-size: 24px; }
+.quiz-result { text-align: center; }
+.quiz-score { margin: 0; font-size: 40px; font-weight: 700; color: var(--accent); }
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.say-big { margin: 0 auto; display: flex; }
+
+/* Итог урока и навигация */
+.summary { padding: 20px; border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+.done-note { color: var(--ok); font-weight: 600; }
+.lesson-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lesson-nav a { flex: 1 1 240px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); text-decoration: none; }
+.lesson-nav a:hover { border-color: var(--accent); }
+.lesson-nav .dir { display: block; color: var(--muted); font-size: 14px; }
+.lesson-nav .next { text-align: right; }
+
+/* Всплывающее окно */
+.popup {
+  width: min(960px, calc(100vw - 16px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+}
+.popup::backdrop { background: rgb(20 15 10 / 55%); }
+.popup-inner { position: relative; padding: 16px; }
+.popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+.popup .card { box-shadow: none; }
+.popup-solo { display: grid; justify-items: center; gap: 8px; padding: 8px; }
+
+/* Главная */
+.hero { padding: 28px 24px; border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+.hero h1 { margin: 0; font-size: clamp(32px, 6vw, 46px); }
+.hero .stage-name { margin: 0; color: var(--accent); font-weight: 650; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.module { margin-bottom: 28px; }
+.module h3 { margin: 0 0 8px; color: var(--muted); font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; }
+.lesson-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.lesson-item a {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+}
+.lesson-item a:hover { border-color: var(--accent); }
+.lesson-num { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--bg); font-weight: 700; }
+.lesson-item.done .lesson-num { background: var(--ok); color: #fff; }
+.lesson-title { font-weight: 600; }
+.lesson-about { display: block; color: var(--muted); font-size: 15px; }
+.lesson-time { color: var(--muted); font-size: 14px; white-space: nowrap; }
+.tone-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 18px; }
+.reset { border: 0; background: none; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 14px; }
+
+/* Словарь */
+.search { width: 100%; min-height: 48px; padding: 10px 16px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); font: inherit; }
+.search:focus { outline: none; border-color: var(--accent); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.tile { display: grid; justify-items: center; gap: 2px; padding: 12px 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); cursor: pointer; }
+.tile:hover { border-color: var(--accent); }
+.tile-char { font-family: var(--font-kai); font-size: 44px; line-height: 1.1; }
+.tile-py { font-weight: 600; }
+.tile-ru { color: var(--muted); font-size: 14px; text-align: center; }
+
+/* Повторение */
+.review-card { display: grid; justify-items: center; gap: 12px; padding: 24px; border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); text-align: center; }
+.review-answer { display: grid; justify-items: center; gap: 6px; }
+.boxes { display: flex; flex-wrap: wrap; gap: 8px; }
+.box-stat { padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); font-size: 14px; }
+.box-stat b { display: block; font-size: 20px; }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 20;
+  width: min(560px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+}
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .card { grid-template-columns: 1fr; padding: 16px; }
+  .card-char { font-size: 64px; }
+  .lesson-head, .hero { padding: 20px 16px; }
+  .lesson-item a { grid-template-columns: 40px 1fr; }
+  .lesson-time { display: none; }
+  .brand { font-size: 15px; }
+}
+
+@media (max-width: 480px) {
+  .brand-text { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

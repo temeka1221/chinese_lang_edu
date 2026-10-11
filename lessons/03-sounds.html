@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 3 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="03">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>понятно, из каких частей состоит китайский слог;</li>
+        <li>согласные узнаются по «семьям», а придыхание отличается от звонкости;</li>
+        <li>ловушки пиньиня для русскоязычных больше не сбивают с толку.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char" data-from="earlier" data-count="4" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>Из чего состоит слог</h2>
+      <p>Китайский слог устроен как поезд из трех вагонов: <b>инициаль</b> (согласная в начале), <b>финаль</b> (все остальное) и <b>тон</b>, который едет поверх всего слога. В слоге <span class="py">hǎo</span> инициаль <i>h</i>, финаль <i>ao</i> и третий тон.</p>
+      <p>Инициалей 21, финалей около 36, а сочетаний между ними — около 400. Это совсем немного: в русском языке разных слогов в десятки раз больше. Поэтому китайским слогам так нужны тоны.</p>
+      <aside class="note analogy">
+        <p>Инициаль — как первая буква в имени, финаль — как фамилия, а тон — интонация, с которой имя произносят. Без инициали слог тоже бывает: <span class="py">ài</span> «любовь», <span class="py">ē</span>, <span class="py">ér</span>.</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Какая финаль в слоге <span class="py">guó</span>?</p>
+        <ol><li>g</li><li>uo</li><li>ó</li></ol>
+        <p class="why">Инициаль — <i>g</i>, финаль — <i>uo</i>, а знак над <i>o</i> показывает второй тон.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Простые гласные</h2>
+      <p>Шесть простых гласных — основа всех финалей. Четыре из них почти русские, две требуют тренировки.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Звук</th><th>Как произносится</th><th>Звучание</th></tr>
+          <tr><td><b>a</b></td><td>Как русское «а», рот широко открыт.</td><td><button class="say" type="button" data-say="a1">ā</button></td></tr>
+          <tr><td><b>o</b></td><td>Округленное «о» с легким «у» в начале: <i>bo</i> звучит почти как «буо».</td><td><button class="say" type="button" data-say="bo1">bō</button></td></tr>
+          <tr><td><b>e</b></td><td>Главная ловушка: не «е» и не «э». Язык оттянут назад, губы расслаблены, звук похож на «ы», которое скатывается в «э».</td><td><button class="say" type="button" data-say="e1">ē</button> <button class="say" type="button" data-say="he1">hē</button></td></tr>
+          <tr><td><b>i</b></td><td>Как русское «и». После z, c, s, zh, ch, sh, r — особый звук, о нем ниже.</td><td><button class="say" type="button" data-say="yi1">yī</button></td></tr>
+          <tr><td><b>u</b></td><td>Как русское «у», губы вытянуты трубочкой.</td><td><button class="say" type="button" data-say="wu1">wū</button></td></tr>
+          <tr><td><b>ü</b></td><td>Губы как для «у», язык как для «и». Похоже на «ю» в слове «тюль», только без «й» в начале.</td><td><button class="say" type="button" data-say="yu1">yū</button> <button class="say" type="button" data-say="lv4">lǜ</button></td></tr>
+        </table>
+      </div>
+      <aside class="note analogy">
+        <p>Звук <i>ü</i> легко поймать так: протянуть «и-и-и» и, не двигая языком, вытянуть губы трубочкой, как для свиста. Звук сам превратится в <i>ü</i>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Сложные финали и носовые</h2>
+      <p>Из простых гласных складываются сложные: <b>ai</b> («ай»), <b>ei</b> («эй»), <b>ao</b> (почти «ау»), <b>ou</b> («оу»). Звучание: <button class="say" type="button" data-say="mai3">mǎi</button> <button class="say" type="button" data-say="mei2">méi</button> <button class="say" type="button" data-say="mao1">māo</button> <button class="say" type="button" data-say="dou1">dōu</button></p>
+      <p>Носовых окончаний два, и их важно различать: от этого меняется слово.</p>
+      <ul>
+        <li><b>-n</b> — короткое «н», кончик языка у верхних зубов, как в слове «он»: <button class="say" type="button" data-say="fan1">fān</button> <button class="say" type="button" data-say="xin1">xīn</button></li>
+        <li><b>-ng</b> — язык отходит назад, звук уходит в нос, как в английском <i>sing</i>: <button class="say" type="button" data-say="fang1">fāng</button> <button class="say" type="button" data-say="xing1">xīng</button></li>
+      </ul>
+      <aside class="note analogy">
+        <p>-n звучит коротко и отрывисто, как «динь» маленького колокольчика. -ng гудит дольше и глубже, как «бом-м» большого колокола.</p>
+      </aside>
+      <aside class="note trap">
+        <p>Финаль <i>ian</i> читается не «иан», а «янь»: 天 <span class="py">tiān</span> звучит как «тянь», 见 <span class="py">jiàn</span> — как «цзянь». А <i>er</i> — особый слог с загнутым языком, похожий на английское <i>are</i>: 二 <span class="py">èr</span>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Шесть семей согласных</h2>
+      <p>Инициали удобно учить семьями: в каждой семье язык и губы работают одинаково. Все слоги ниже можно прослушать.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Семья</th><th>Как произносится</th><th>Звучание</th></tr>
+          <tr><td><b>Губные</b><br>b p m f</td><td>Работают губы. <i>b</i> — не «б», а «п» без выдоха; <i>p</i> — «п» с сильным выдохом.</td><td><button class="say" type="button" data-say="ba1">bā</button> <button class="say" type="button" data-say="pa1">pā</button> <button class="say" type="button" data-say="ma1">mā</button> <button class="say" type="button" data-say="fa1">fā</button></td></tr>
+          <tr><td><b>У зубов</b><br>d t n l</td><td>Кончик языка у верхних зубов. <i>d</i> — «т» без выдоха, <i>t</i> — «т» с выдохом.</td><td><button class="say" type="button" data-say="da1">dā</button> <button class="say" type="button" data-say="ta1">tā</button> <button class="say" type="button" data-say="na1">nā</button> <button class="say" type="button" data-say="la1">lā</button></td></tr>
+          <tr><td><b>Задние</b><br>g k h</td><td>Работает задняя часть языка. <i>g</i> — «к» без выдоха, <i>k</i> — «к» с выдохом, <i>h</i> — как русское «х», а не английское h.</td><td><button class="say" type="button" data-say="ge1">gē</button> <button class="say" type="button" data-say="ke1">kē</button> <button class="say" type="button" data-say="he1">hē</button></td></tr>
+          <tr><td><b>Мягкие</b><br>j q x</td><td>Кончик языка прижат к нижним зубам, губы в улыбке. <i>j</i> ≈ «дзь», <i>q</i> ≈ «ць» с выдохом, <i>x</i> ≈ мягкое «сь». Встречаются только перед <i>i</i> и <i>ü</i>.</td><td><button class="say" type="button" data-say="ji1">jī</button> <button class="say" type="button" data-say="qi1">qī</button> <button class="say" type="button" data-say="xi1">xī</button></td></tr>
+          <tr><td><b>Загнутые</b><br>zh ch sh r</td><td>Кончик языка загнут к твердому небу, как будто во рту горячая картошка. <i>zh</i> ≈ «чж», <i>ch</i> ≈ «ч» с выдохом, <i>sh</i> ≈ «ш», <i>r</i> — мягкое «ж» почти без шума.</td><td><button class="say" type="button" data-say="zhi1">zhī</button> <button class="say" type="button" data-say="chi1">chī</button> <button class="say" type="button" data-say="shi1">shī</button> <button class="say" type="button" data-say="ri4">rì</button></td></tr>
+          <tr><td><b>Свистящие</b><br>z c s</td><td>Кончик языка у нижних зубов, звук плоский. <i>z</i> ≈ «дз» (или «ц» без выдоха), <i>c</i> ≈ «ц» с сильным выдохом, <i>s</i> = «с».</td><td><button class="say" type="button" data-say="zi1">zī</button> <button class="say" type="button" data-say="ci1">cī</button> <button class="say" type="button" data-say="si1">sī</button></td></tr>
+        </table>
+      </div>
+      <aside class="note analogy">
+        <p>Три последние семьи легко перепутать. Помогает образ: <b>мягкие</b> j q x произносятся с улыбкой, <b>загнутые</b> zh ch sh r — с «картошкой во рту», <b>свистящие</b> z c s — сквозь сжатые зубы, как змея.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Придыхание: тест с листком бумаги</h2>
+      <p>В русском пары согласных различаются звонкостью: «б» и «п», «д» и «т». В китайском важно другое — <b>придыхание</b>, сильный выдох после согласной. Пары b/p, d/t, g/k, j/q, zh/ch, z/c различаются только им. Звонких «б», «д», «г» в китайском нет совсем.</p>
+      <aside class="note rule">
+        <p>Проверка простая: узкая полоска бумаги перед губами. На <i>p, t, k, q, ch, c</i> она отлетает от выдоха, на <i>b, d, g, j, zh, z</i> почти не шевелится. Огонек свечи на <i>p</i> гаснет, а на <i>b</i> только дрожит.</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Какой слог звучит? <button class="say" type="button" data-say="pa1"></button></p>
+        <ol><li>bā</li><li>pā</li></ol>
+        <p class="why">Звучал <i>pā</i> — с сильным выдохом. Без выдоха получилось бы <i>bā</i>, а звонкого «ба» в китайском нет.</p>
+      </div>
+      <div class="check" data-answer="1">
+        <p>Какой слог звучит? <button class="say" type="button" data-say="da4"></button></p>
+        <ol><li>dà</li><li>tà</li></ol>
+        <p class="why">Звучал <i>dà</i> 大 «большой»: «т» без выдоха. Русскому уху он кажется чем-то средним между «да» и «та».</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Особое i</h2>
+      <p>После z, c, s, zh, ch, sh, r буква <i>i</i> не читается как «и». Язык остается там, где был для согласной, и согласная просто тянется голосом: <span class="py">sì</span> звучит как «сы», <span class="py">shì</span> — как твердое «шы», <span class="py">rì</span> — как «жы».</p>
+      <p>Звучание: <button class="say" type="button" data-say="si4">sì 四</button> <button class="say" type="button" data-say="shi4">shì 是</button> <button class="say" type="button" data-say="ri4">rì 日</button> <button class="say" type="button" data-say="zi4">zì 字</button></p>
+      <aside class="note trap">
+        <p>Ловушки для русскоязычных одним списком: <i>b</i> — не «б», <i>e</i> — не «е», <i>x</i> — не «икс», а мягкое «сь», <i>q</i> — не «кью», а «ць», <i>h</i> — русское «х», <i>ian</i> — «янь», а <i>i</i> после свистящих и загнутых — не «и».</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Почему 习 по-русски пишут «Си»</h2>
+      <p>В русских текстах китайские имена записывают не пиньинем, а кириллицей по системе Палладия. Ее создал в XIX веке архимандрит Палладий (Кафаров), глава русской духовной миссии в Пекине. Соответствия у нее постоянные: <i>x</i> → «с», <i>q</i> → «ц», <i>j</i> → «цз», <i>zh</i> → «чж», <i>r</i> → «ж», <i>-n</i> → «нь».</p>
+      <ul>
+        <li>习近平 <span class="py">Xí Jìnpíng</span> → Си Цзиньпин;</li>
+        <li>青岛 <span class="py">Qīngdǎo</span> → Циндао;</li>
+        <li>上海 <span class="py">Shànghǎi</span> → Шанхай;</li>
+        <li>人民日报 <span class="py">Rénmín Rìbào</span> → «Жэньминь жибао».</li>
+      </ul>
+      <aside class="note culture">
+        <p>Палладица хороша для книг и новостей, но звук передает лишь примерно. Для произношения надежнее пиньинь и записи носителей.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Практика: звуки на слух</h2>
+      <p>В каждом задании звучит один слог из группы похожих. Полезно сначала повторить его вслух и только потом выбирать.</p>
+      <div data-exercises="sound" data-count="12" data-title="Звуки на слух"
+           data-sets="ba1/pa1 da4/ta4 ge1/ke1 ji1/qi1/xi1 zhi1/chi1/shi1 zi1/ci1/si1 zhi1/zi1/ji1 shi1/si1/xi1 lu4/lv4 fan1/fang1 xin1/xing1 nu3/nv3"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Слог = инициаль + финаль + тон.</li>
+        <li>Пары b/p, d/t, g/k, j/q, zh/ch, z/c различаются выдохом, а не звонкостью.</li>
+        <li>j q x — мягкие, с улыбкой; zh ch sh r — загнутые; z c s — свистящие.</li>
+        <li>e — не «е», ü — «ю» без «й», ian — «янь», -n и -ng — разные звуки.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 1 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="01">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>четыре тона и легкий тон узнаются на слух;</li>
+        <li>знаки тонов читаются без подсказки;</li>
+        <li>понятно, почему <span class="py">mā</span> и <span class="py">mǎ</span> — разные слова.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Тон — часть слова</h2>
+      <p>В русском языке мелодия голоса окрашивает всю фразу: «Да.», «Да?» и «Да!» звучат по-разному, но слово остается тем же. В китайском своя мелодия есть у каждого слога, и она входит в слово, как ударение в русском. «Мукá» и «мýка» различаются только ударением, а китайские <span class="py">mā</span> «мама» и <span class="py">mǎ</span> «лошадь» — только тоном.</p>
+      <p>Тон — это движение высоты голоса на слоге: ровно, вверх, вниз или вниз и вверх. Громкость и длина тут почти ни при чем.</p>
+    </section>
+
+    <section>
+      <h2>Шкала высоты голоса</h2>
+      <p>Лингвист Чжао Юаньжэнь придумал описывать тоны цифрами от 1 до 5, где 1 — самый низкий голос, 5 — самый высокий. Первый тон — 55: высоко и ровно. Второй — 35: от середины вверх. Третий — 214: вниз до самого низа и немного вверх. Четвертый — 51: сверху до самого низа.</p>
+      <svg class="tone-chart" viewBox="0 0 450 215" role="img" aria-label="График четырех тонов на шкале высоты от 1 до 5">
+        <defs>
+          <marker id="tone-a1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="f1" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="tone-a2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="f2" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="tone-a3" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="f3" d="M0 0L10 5L0 10z"/></marker>
+          <marker id="tone-a4" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path class="f4" d="M0 0L10 5L0 10z"/></marker>
+        </defs>
+        <g class="lvl">
+          <path d="M40 25H445M40 60H445M40 95H445M40 130H445M40 165H445"/>
+        </g>
+        <g class="lvl-label">
+          <text x="30" y="29">5</text><text x="30" y="64">4</text><text x="30" y="99">3</text><text x="30" y="134">2</text><text x="30" y="169">1</text>
+        </g>
+        <path class="c1" d="M62 25H132" marker-end="url(#tone-a1)"/>
+        <path class="c2" d="M168 95L236 27" marker-end="url(#tone-a2)"/>
+        <path class="c3" d="M268 130L300 163L334 62" marker-end="url(#tone-a3)"/>
+        <path class="c4" d="M366 25L432 161" marker-end="url(#tone-a4)"/>
+        <g class="tone-label">
+          <text x="100" y="200" class="f1">1-й ˉ 55</text>
+          <text x="203" y="200" class="f2">2-й ˊ 35</text>
+          <text x="303" y="200" class="f3">3-й ˇ 214</text>
+          <text x="400" y="200" class="f4">4-й ˋ 51</text>
+        </g>
+      </svg>
+    </section>
+
+    <section>
+      <h2>Четыре тона и легкий</h2>
+      <div class="tones">
+        <div class="tone-box tb1">
+          <h3><span class="t1">ˉ</span> 1-й тон: высокий ровный</h3>
+          <p>Голос держится высоко и не двигается, как долгая нота в песне или «а-а-а» на приеме у врача. Высота заметно выше обычной разговорной.</p>
+          <p class="tone-ex"><span><button class="say" type="button" data-say="ma1"><span class="py">mā</span></button> 妈 мама</span> · <span><button class="say" type="button" data-say="ba1"><span class="py">bā</span></button> 八 восемь</span> · <span><button class="say" type="button" data-say="san1"><span class="py">sān</span></button> 三 три</span></p>
+        </div>
+        <div class="tone-box tb2">
+          <h3><span class="t2">ˊ</span> 2-й тон: восходящий</h3>
+          <p>Голос поднимается от середины вверх, как в переспросе «А?» или удивленном «Что?».</p>
+          <p class="tone-ex"><span><button class="say" type="button" data-say="ma2"><span class="py">má</span></button> 麻 конопля</span> · <span><button class="say" type="button" data-say="ren2"><span class="py">rén</span></button> 人 человек</span> · <span><button class="say" type="button" data-say="shi2"><span class="py">shí</span></button> 十 десять</span></p>
+        </div>
+        <div class="tone-box tb3">
+          <h3><span class="t3">ˇ</span> 3-й тон: низкий</h3>
+          <p>Голос опускается до самого низа, а в конце фразы немного приподнимается. Похоже на задумчивое «Ну-у…» или недоверчивое «Да-а?».</p>
+          <p class="tone-ex"><span><button class="say" type="button" data-say="ma3"><span class="py">mǎ</span></button> 马 лошадь</span> · <span><button class="say" type="button" data-say="ni3"><span class="py">nǐ</span></button> 你 ты</span> · <span><button class="say" type="button" data-say="hao3"><span class="py">hǎo</span></button> 好 хорошо</span></p>
+        </div>
+        <div class="tone-box tb4">
+          <h3><span class="t4">ˋ</span> 4-й тон: падающий</h3>
+          <p>Голос резко падает сверху вниз, как в команде «Стоп!» или в уверенном «Да!».</p>
+          <p class="tone-ex"><span><button class="say" type="button" data-say="ma4"><span class="py">mà</span></button> 骂 ругать</span> · <span><button class="say" type="button" data-say="da4"><span class="py">dà</span></button> 大 большой</span> · <span><button class="say" type="button" data-say="liu4"><span class="py">liù</span></button> 六 шесть</span></p>
+        </div>
+        <div class="tone-box tb5">
+          <h3><span class="t5">·</span> Легкий тон</h3>
+          <p>Короткий безударный слог без знака тона. Его высота зависит от соседа, как у второго слога в русском «мама».</p>
+          <p class="tone-ex"><span><button class="say" type="button" data-say="妈妈"><span class="py">māma</span></button> 妈妈 мама</span> · <span><button class="say" type="button" data-say="吗"><span class="py">ma</span></button> 吗 частица вопроса</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Знаки тонов</h2>
+      <p>Знак над гласной сам рисует движение голоса: <span class="t1">ˉ</span> — ровно, <span class="t2">ˊ</span> — вверх, <span class="t3">ˇ</span> — вниз и вверх, <span class="t4">ˋ</span> — вниз. Легкий тон обходится без знака.</p>
+      <p>В курсе пиньинь еще и раскрашен: <span class="t1">1-й красный</span>, <span class="t2">2-й зеленый</span>, <span class="t3">3-й синий</span>, <span class="t4">4-й фиолетовый</span>, <span class="t5">легкий серый</span>. Цвет помогает глазу, но главным остается знак: в книгах и словарях цветов не бывает.</p>
+      <div class="check" data-answer="3">
+        <p>Какой тон у слога <span class="py">mǎ</span>?</p>
+        <ol><li>1-й</li><li>2-й</li><li>3-й</li><li>4-й</li></ol>
+        <p class="why">Знак ˇ — «галочка» вниз и вверх — обозначает 3-й тон. <span class="py">mǎ</span> 马 значит «лошадь».</p>
+      </div>
+      <div class="check" data-answer="4">
+        <p>Какой знак у резкого падающего тона, как в команде «Стоп!»?</p>
+        <ol><li><span class="big-mark">ā</span></li><li><span class="big-mark">á</span></li><li><span class="big-mark">ǎ</span></li><li><span class="big-mark">à</span></li></ol>
+        <p class="why">Падающий тон — 4-й, его знак ˋ идет сверху вниз, как и голос: <span class="py">à</span>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Мама ругает лошадь?</h2>
+      <p>Знаменитая фраза для тренировки тонов: 妈妈骂马吗？ — «Мама ругает лошадь?» Все пять слогов звучат как <i>ma</i> и различаются только тоном.</p>
+      <p><button class="say" type="button" data-say="妈妈 ma4 ma3 吗"><span class="py">Māma mà mǎ ma?</span></button></p>
+      <aside class="note rule">
+        <p>Полный третий тон с подъемом (214) слышен в основном в конце фразы и при медленном чтении. В середине речи он почти всегда звучит просто низко (21): голос проваливается и сразу переходит к следующему слогу. Поэтому третий тон удобнее представлять как самый низкий, а не как «галочку».</p>
+      </aside>
+      <aside class="note trap">
+        <p>Русская интонация вопроса поднимает голос в конце фразы. В китайском тон слова не меняется даже в вопросе: вопрос задает частица 吗 <span class="py">ma</span>, а мелодия слогов остается прежней.</p>
+        <p>Вторая частая ошибка — слишком низкий первый тон. Он должен звучать заметно выше обычной речи, как будто фраза поется.</p>
+      </aside>
+      <aside class="note culture">
+        <p>По контексту китайцы обычно понимают и неточные тоны, но иногда ошибка звучит забавно. 我想问你 <span class="py">wǒ xiǎng wèn nǐ</span> значит «Я хочу тебя спросить», а с третьим тоном вместо четвертого получается 我想吻你 <span class="py">wǒ xiǎng wěn nǐ</span> — «Я хочу тебя поцеловать».</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Практика: тоны на слух</h2>
+      <p>Перед ответом полезно повторить слог вслух и показать тон рукой: ровно, вверх, вниз, резко вниз. Движение руки помогает услышать мелодию. Если слог прозвучал неразборчиво, кнопка «Еще раз» повторяет его.</p>
+      <div data-exercises="tone" data-count="12" data-title="Тоны на слух"
+           data-syllables="ma1 ma2 ma3 ma4 ba1 ba2 ba3 ba4 yi1 yi2 yi3 yi4 da1 da2 da3 da4 shi1 shi2 shi3 shi4 tang1 tang2 tang3 tang4"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Тон — мелодия слога, он различает слова, как ударение в русском.</li>
+        <li>1-й ˉ высокий ровный, 2-й ˊ восходящий, 3-й ˇ низкий, 4-й ˋ падающий, легкий тон без знака.</li>
+        <li>В живой речи третий тон чаще всего просто низкий.</li>
+        <li>В вопросе тоны слов не меняются, вопрос задает частица 吗.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

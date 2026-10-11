@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 10 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="10">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>получается поздороваться, назвать свое имя и страну;</li>
+        <li>получается задать вопрос с 吗 и с 什么 и ответить на него;</li>
+        <li>получается написать 我 是 叫 什 么 名 很.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char order" data-from="earlier" data-count="5" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>Диалог: знакомство</h2>
+      <p>Анна из России знакомится с Ван Мином из Китая. Каждую реплику можно прослушать, а любой знак — открыть кликом.</p>
+      <ul data-words class="dialog">
+        <li data-hz="你好！" data-py="Nǐ hǎo!">Ван Мин: Здравствуйте!</li>
+        <li data-hz="你好！" data-py="Nǐ hǎo!">Анна: Здравствуйте!</li>
+        <li data-hz="你叫什么名字？" data-py="Nǐ jiào shénme míngzi?">Ван Мин: Как вас зовут? (букв. «Ты зовешься каким именем?»)</li>
+        <li data-hz="我叫安娜。你呢？" data-py="Wǒ jiào Ānnà. Nǐ ne?">Анна: Меня зовут Анна. А вас?</li>
+        <li data-hz="我叫王明。" data-py="Wǒ jiào Wáng Míng.">Ван Мин: Меня зовут Ван Мин.</li>
+        <li data-hz="你是中国人吗？" data-py="Nǐ shì Zhōngguórén ma?">Анна: Вы китаец?</li>
+        <li data-hz="是，我是中国人。你呢？" data-py="Shì, wǒ shì Zhōngguórén. Nǐ ne?">Ван Мин: Да, я китаец. А вы?</li>
+        <li data-hz="我不是中国人，我是俄罗斯人。" data-py="Wǒ bú shì Zhōngguórén, wǒ shì Éluósīrén.">Анна: Я не китаянка, я русская.</li>
+        <li data-hz="认识你很高兴！" data-py="Rènshi nǐ hěn gāoxìng!">Ван Мин: Очень приятно познакомиться!</li>
+        <li data-hz="我也很高兴！" data-py="Wǒ yě hěn gāoxìng!">Анна: Мне тоже очень приятно!</li>
+      </ul>
+      <aside class="note culture">
+        <p>В китайском имени фамилия стоит первой: 王明 — фамилия Ван, имя Мин. Три самые частые фамилии Китая — 王 Ван, 李 Ли и 张 Чжан, их носят больше 250 миллионов человек.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Как устроены фразы</h2>
+      <h3>Порядок слов как в русском</h3>
+      <p>Кто — что делает — что: 我 叫 安娜 «Я зовусь Анной». Слова не меняются ни по падежам, ни по родам: 我 — и «я», и «меня», и «мне».</p>
+
+      <h3>是 — знак равенства</h3>
+      <p>是 <span class="py">shì</span> связывает два слова, как «=»: 我是中国人 — «я = китаец». Отрицание — 不是 <span class="py">bú shì</span>. Перед прилагательными 是 не нужен: «я хороший» — 我很好, а не 我是好.</p>
+
+      <h3>Вопрос «да или нет» — частица 吗</h3>
+      <p>Чтобы превратить утверждение в вопрос, достаточно поставить в конце 吗: 你是中国人 «ты китаец» → 你是中国人吗？ «ты китаец?». Порядок слов не меняется.</p>
+      <aside class="note trap">
+        <p>Отдельных слов «да» и «нет» в китайском почти нет. Отвечают тем же глаголом: «你是中国人吗？» — «是。» (да) или «不是。» (нет).</p>
+      </aside>
+
+      <h3>Вопрос со словом 什么</h3>
+      <p>什么 <span class="py">shénme</span> «что, какой» ставится туда, где в ответе будет нужное слово. Порядок слов тот же, что и в ответе.</p>
+      <aside class="note analogy">
+        <p>Китайский вопрос — это ответ с дыркой. «你叫什么名字？» → «我叫安娜。»: на месте 什么名字 в ответе стоит имя. С 什么 частица 吗 не нужна.</p>
+      </aside>
+
+      <h3>呢 — «а ты?»</h3>
+      <p>Короткий встречный вопрос: 我叫安娜。你呢？ «Меня зовут Анна. А тебя?» Удобно, чтобы не повторять весь вопрос.</p>
+      <div class="check" data-answer="3">
+        <p>Как сказать «Вы китаец?»</p>
+        <ol><li>吗你是中国人？</li><li>你是吗中国人？</li><li>你是中国人吗？</li></ol>
+        <p class="why">吗 всегда стоит в конце фразы, остальные слова — в обычном порядке.</p>
+      </div>
+      <div class="check" data-answer="1">
+        <p>Как ответить «нет» на вопрос 你是中国人吗？</p>
+        <ol><li>不是。</li><li>不好。</li><li>是吗？</li></ol>
+        <p class="why">Отвечают глаголом из вопроса с отрицанием: 不是 <span class="py">bú shì</span>.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Свое имя по-китайски</h2>
+      <p>Иностранные имена записывают знаками, похожими по звучанию:</p>
+      <ul>
+        <li>Анна — 安娜 <span class="py">Ānnà</span>;</li>
+        <li>Иван — 伊万 <span class="py">Yīwàn</span>;</li>
+        <li>Мария — 玛丽亚 <span class="py">Mǎlìyà</span>;</li>
+        <li>Россия — 俄罗斯 <span class="py">Éluósī</span>, русский — 俄罗斯人 <span class="py">Éluósīrén</span>.</li>
+      </ul>
+      <aside class="note culture">
+        <p>Для женских имен выбирают «красивые» знаки: в 娜 есть ключ «женщина» 女, в 玛 — «нефрит» 王 и звуковая часть 马. Звук важнее смысла, но смысл тоже стараются сделать приятным.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Новые иероглифы</h2>
+      <div data-cards></div>
+    </section>
+
+    <section>
+      <h2>Слова из знакомых знаков</h2>
+      <ul data-words>
+        <li data-hz="我们" data-py="wǒmen">мы</li>
+        <li data-hz="什么" data-py="shénme">что, какой</li>
+        <li data-hz="名字" data-py="míngzi">имя</li>
+        <li data-hz="很好" data-py="hěn hǎo">очень хорошо</li>
+        <li data-hz="不是" data-py="bú shì">нет; не являться</li>
+        <li data-hz="我是中国人" data-py="Wǒ shì Zhōngguórén.">я китаец</li>
+        <li data-hz="你叫什么？" data-py="Nǐ jiào shénme?">как тебя зовут?</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Практика</h2>
+      <div data-exercises="meaning char pinyin order write" data-count="12"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>你好！我叫…。我是俄罗斯人。 — знакомство в трех фразах.</li>
+        <li>是 — связка «=», отрицание 不是. Перед прилагательным — 很, а не 是.</li>
+        <li>吗 в конце превращает фразу в вопрос. 什么 стоит на месте ответа.</li>
+        <li>Изучены знаки 我 是 叫 什 么 名 很.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

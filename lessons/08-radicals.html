@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 8 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="08">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>по ключу угадывается, к какой области относится незнакомый знак;</li>
+        <li>звуковая часть подсказывает чтение;</li>
+        <li>получается написать 也 他 她 门 们 马 妈 吗 字.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char order" data-from="earlier" data-count="5" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>Ключ — смысловая метка</h2>
+      <p>Большинство иероглифов собраны из двух частей. Одна из них — <b>ключ</b> 部首 <span class="py">bùshǒu</span>: он подсказывает, к какой области относится смысл. По ключам знаки расставлены в бумажных словарях, классических ключей 214.</p>
+      <aside class="note analogy">
+        <p>Ключ работает как значок отдела в супермаркете: увидел молоко на табличке — значит, здесь молочные продукты. Знак с ключом 氵 «вода» почти наверняка связан с жидкостью: река, море, мыть, плавать.</p>
+      </aside>
+      <p>Многие ключи в составе знака меняют форму: 人 слева становится 亻, 水 — 氵, 手 — 扌, 心 — 忄, 言 — 讠.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Ключ</th><th>Значение</th><th>Примеры</th></tr>
+          <tr><td class="big-cell">亻</td><td>человек</td><td>你 他 们 休 什</td></tr>
+          <tr><td class="big-cell">女</td><td>женщина</td><td>好 妈 她 姐 妹</td></tr>
+          <tr><td class="big-cell">口</td><td>рот, речь, звук</td><td>吗 叫 和 喝 吃</td></tr>
+          <tr><td class="big-cell">氵</td><td>вода</td><td>河 海 洗 汤 酒</td></tr>
+          <tr><td class="big-cell">扌</td><td>рука, действие</td><td>打 找 把 推 拉</td></tr>
+          <tr><td class="big-cell">讠</td><td>слово, речь</td><td>说 话 语 请 谢</td></tr>
+          <tr><td class="big-cell">艹</td><td>трава, растения</td><td>花 茶 草 菜 药</td></tr>
+          <tr><td class="big-cell">宀</td><td>крыша, дом</td><td>家 字 安 室</td></tr>
+          <tr><td class="big-cell">木</td><td>дерево</td><td>林 森 村 树 桌</td></tr>
+          <tr><td class="big-cell">日</td><td>солнце, время</td><td>明 早 晚 时 昨</td></tr>
+          <tr><td class="big-cell">月</td><td>луна; тело, мясо</td><td>有 朋 脸 脚 肚</td></tr>
+          <tr><td class="big-cell">忄</td><td>сердце, чувства</td><td>忙 快 情 怕</td></tr>
+          <tr><td class="big-cell">灬</td><td>огонь</td><td>热 点 照 黑</td></tr>
+          <tr><td class="big-cell">辶</td><td>движение, путь</td><td>这 进 还 远 道</td></tr>
+          <tr><td class="big-cell">门</td><td>дверь</td><td>们 问 间 闻</td></tr>
+          <tr><td class="big-cell">纟</td><td>нить, шелк</td><td>红 给 绿 经</td></tr>
+        </table>
+      </div>
+      <div class="check" data-answer="1">
+        <p>С чем, скорее всего, связан знак 河?</p>
+        <ol><li>С водой</li><li>С деревом</li><li>С речью</li></ol>
+        <p class="why">Слева ключ 氵 «вода». 河 <span class="py">hé</span> значит «река».</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Где стоит ключ</h2>
+      <p>Части знака раскладываются в квадрате по нескольким схемам, как мебель в комнате:</p>
+      <ul>
+        <li><b>слева и справа</b>: 你, 他, 妈, 明;</li>
+        <li><b>сверху и снизу</b>: 字, 爸, 是;</li>
+        <li><b>в рамке</b>: 国, 回, 门;</li>
+        <li><b>единый знак</b>, который не делится: 人, 大, 木, 马.</li>
+      </ul>
+      <p>Ключ чаще всего стоит слева или сверху, но бывает и снизу, и вокруг.</p>
+    </section>
+
+    <section>
+      <h2>Смысл + звук</h2>
+      <p>Больше 80% иероглифов собраны по одной схеме: <b>ключ подсказывает смысл, вторая часть — звучание</b>. Знак 马 <span class="py">mǎ</span> «лошадь» стал звуковой частью целой семьи:</p>
+      <ul>
+        <li>妈 <span class="py">mā</span> «мама» — женщина 女 + звук ma;</li>
+        <li>吗 <span class="py">ma</span> — частица вопроса: рот 口 + звук ma;</li>
+        <li>骂 <span class="py">mà</span> «ругать» — два рта 口口 + звук ma;</li>
+        <li>码 <span class="py">mǎ</span> «номер, код» — камень 石 + звук ma.</li>
+      </ul>
+      <p>Еще одна знаменитая семья — 青 <span class="py">qīng</span> «сине-зеленый»:</p>
+      <ul>
+        <li>清 <span class="py">qīng</span> «чистый, прозрачный» — с водой 氵;</li>
+        <li>晴 <span class="py">qíng</span> «ясная погода» — с солнцем 日;</li>
+        <li>请 <span class="py">qǐng</span> «просить, пожалуйста» — со словом 讠;</li>
+        <li>情 <span class="py">qíng</span> «чувство» — с сердцем 忄.</li>
+      </ul>
+      <aside class="note analogy">
+        <p>Ключ и звуковая часть — как фамилия и имя. Фамилия говорит, из какой «семьи смыслов» знак, а имя подсказывает, как к нему обращаться.</p>
+      </aside>
+      <aside class="note trap">
+        <p>Звуковая часть дает подсказку, а не правило. За три тысячи лет произношение сильно изменилось, поэтому тон часто отличается, а иногда и сама согласная: 他 <span class="py">tā</span> пишется с 也 <span class="py">yě</span>.</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Как, скорее всего, читается незнакомый знак 蚂 (насекомое 虫 + 马)?</p>
+        <ol><li>chóng</li><li>mǎ</li><li>shuǐ</li></ol>
+        <p class="why">Звуковая часть 马 подсказывает чтение ma. 蚂 <span class="py">mǎ</span> встречается в слове 蚂蚁 <span class="py">mǎyǐ</span> «муравей».</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Он, она и семья 也</h2>
+      <p>Знак 也 <span class="py">yě</span> «тоже» прячется в 他 «он» и 她 «она». Знак 他 существует давно, а отдельного письменного «она» в китайском не было до XX века.</p>
+      <aside class="note history">
+        <p>Около 1920 года поэт и лингвист Лю Баньнун предложил писать «она» как 她 — с ключом «женщина». Переводчикам европейских книг этого знака очень не хватало, и он быстро прижился. А его стихотворение 《教我如何不想她》 «Как мне не думать о ней» стало популярной песней. Музыку к ней написал Чжао Юаньжэнь — тот самый лингвист, который придумал шкалу тонов из урока 1.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Новые иероглифы</h2>
+      <p>Знаки урока идут парами: сначала часть, потом знак с ней. 也 → 他 и 她, 门 → 们, 马 → 妈 и 吗, а 子 из урока 4 → 字.</p>
+      <div data-cards></div>
+    </section>
+
+    <section>
+      <h2>Слова из знакомых знаков</h2>
+      <ul data-words>
+        <li data-hz="他们" data-py="tāmen">они</li>
+        <li data-hz="她们" data-py="tāmen">они (о женщинах)</li>
+        <li data-hz="你们" data-py="nǐmen">вы (несколько человек)</li>
+        <li data-hz="门口" data-py="ménkǒu">вход, у двери</li>
+        <li data-hz="妈妈" data-py="māma">мама</li>
+        <li data-hz="马上" data-py="mǎshàng">сейчас же («на коне»)</li>
+        <li data-hz="你好吗" data-py="nǐ hǎo ma">как дела?</li>
+        <li data-hz="大字" data-py="dàzì">крупные иероглифы</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Практика</h2>
+      <div data-exercises="meaning char pinyin order write" data-count="12"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Ключ подсказывает смысл: 氵 — вода, 亻 — человек, 口 — рот и речь.</li>
+        <li>Больше 80% знаков устроены как «смысл + звук»: 妈 = 女 + 马.</li>
+        <li>Звуковая часть — подсказка, а не правило.</li>
+        <li>Изучены знаки 也 他 她 门 们 马 妈 吗 字.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

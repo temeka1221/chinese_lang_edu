@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 9 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="09">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>получается считать до 999 и записывать числа иероглифами;</li>
+        <li>понятно, когда говорят 两, а когда 二;</li>
+        <li>между числом и предметом появляется счетное слово;</li>
+        <li>получается написать 四 五 百 两 几 个.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h3>Разминка</h3>
+      <div data-exercises="meaning pinyin char order" data-from="earlier" data-count="5" data-title="Разминка"></div>
+    </section>
+
+    <section>
+      <h2>От одного до десяти</h2>
+      <p>Шесть цифр уже знакомы, в этом уроке добавляются 四 и 五. Вместе с жестами: в Китае числа до десяти показывают одной рукой, и жесты для 6–10 непохожи на русские.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Число</th><th>Знак</th><th>Чтение</th><th>Жест</th></tr>
+          <tr><td>1</td><td class="big-cell">一</td><td><button class="say" type="button" data-say="一" data-py="yī">yī</button></td><td>указательный палец</td></tr>
+          <tr><td>2</td><td class="big-cell">二</td><td><button class="say" type="button" data-say="二" data-py="èr">èr</button></td><td>указательный и средний</td></tr>
+          <tr><td>3</td><td class="big-cell">三</td><td><button class="say" type="button" data-say="三" data-py="sān">sān</button></td><td>три пальца, большой и указательный прижаты</td></tr>
+          <tr><td>4</td><td class="big-cell">四</td><td><button class="say" type="button" data-say="四" data-py="sì">sì</button></td><td>четыре пальца, большой прижат</td></tr>
+          <tr><td>5</td><td class="big-cell">五</td><td><button class="say" type="button" data-say="五" data-py="wǔ">wǔ</button></td><td>раскрытая ладонь</td></tr>
+          <tr><td>6</td><td class="big-cell">六</td><td><button class="say" type="button" data-say="六" data-py="liù">liù</button></td><td>🤙 большой палец и мизинец</td></tr>
+          <tr><td>7</td><td class="big-cell">七</td><td><button class="say" type="button" data-say="七" data-py="qī">qī</button></td><td>щепотка: большой, указательный и средний сведены</td></tr>
+          <tr><td>8</td><td class="big-cell">八</td><td><button class="say" type="button" data-say="八" data-py="bā">bā</button></td><td>«пистолетик»: большой и указательный, как знак 八</td></tr>
+          <tr><td>9</td><td class="big-cell">九</td><td><button class="say" type="button" data-say="九" data-py="jiǔ">jiǔ</button></td><td>согнутый крючком указательный палец</td></tr>
+          <tr><td>10</td><td class="big-cell">十</td><td><button class="say" type="button" data-say="十" data-py="shí">shí</button></td><td>кулак или скрещенные указательные пальцы, как 十</td></tr>
+        </table>
+      </div>
+      <aside class="note culture">
+        <p>На китайском рынке продавец может показать цену одной рукой, а покупатель — ответить так же. Жест «8» легко принять за «пистолет», а «6» — за приглашение созвониться. В Китае это просто цифры.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>До 99: числа-конструктор</h2>
+      <p>Китайские числа складываются из знакомых знаков без новых слов. Множитель стоит перед 十, слагаемое — после:</p>
+      <ul>
+        <li>十一 = 10 + 1 → 11, 十九 → 19;</li>
+        <li>二十 = 2 × 10 → 20, 九十 → 90;</li>
+        <li>二十一 = 2 × 10 + 1 → 21, 九十九 → 99.</li>
+      </ul>
+      <aside class="note analogy">
+        <p>Это как записывать числа словами по-русски, только честнее: не «одиннадцать» и «двадцать», а прямо «десять-один» и «два-десять». Ни исключений, ни особых слов вроде «сорок» и «девяносто».</p>
+      </aside>
+      <div class="check" data-answer="2">
+        <p>Как записывается число 47?</p>
+        <ol><li>七十四</li><li>四十七</li><li>四七十</li></ol>
+        <p class="why">Четыре десятка 四十 и семь 七: 四十七. А 七十四 — это 74.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Сотни и дальше</h2>
+      <p>Сто — 一百 <span class="py">yìbǎi</span>, двести — 两百 или 二百, триста — 三百. Число 365: 三百六十五. Если в середине числа ноль, его называют: 105 — 一百零五, где 零 <span class="py">líng</span> «ноль».</p>
+      <p>Дальше идут 千 <span class="py">qiān</span> «тысяча» и 万 <span class="py">wàn</span> «десять тысяч». Китайцы считают большие числа десятками тысяч: 100 000 — это 十万 «десять ванов».</p>
+      <aside class="note analogy">
+        <p>На Руси когда-то тоже было отдельное слово для десяти тысяч — «тьма». 万 — китайская «тьма», и с ней миллион звучит как 一百万 «сто тем».</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>两 или 二</h2>
+      <aside class="note rule">
+        <p>Когда считают предметы, «два» — это 两 <span class="py">liǎng</span>: 两个人 «два человека». В счете, номерах, датах и составе чисел — 二: 二, 十二, 二月, 第二.</p>
+      </aside>
+      <div class="check" data-answer="1">
+        <p>Как сказать «два человека»?</p>
+        <ol><li>两个人</li><li>二个人</li><li>二人个</li></ol>
+        <p class="why">При счете предметов «два» — 两, а счетное слово 个 стоит между числом и предметом.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Счетные слова</h2>
+      <p>Между числом и предметом в китайском почти всегда стоит счетное слово: 三个人 «три человека», буквально «три штуки людей». Самое частое и универсальное — 个 <span class="py">gè</span>.</p>
+      <aside class="note analogy">
+        <p>В русском так тоже бывает: «пять <b>голов</b> скота», «три <b>листа</b> бумаги», «две <b>штуки</b> хлеба». В китайском так говорят про все: про людей, книги, яблоки, дома. У разных предметов свои счетные слова, но 个 выручает почти всегда.</p>
+      </aside>
+      <p>Вопрос «сколько?» для небольших чисел — 几 <span class="py">jǐ</span>, тоже со счетным словом: 几个人？ «Сколько человек?»</p>
+    </section>
+
+    <section>
+      <h2>Счастливые и несчастливые числа</h2>
+      <ul>
+        <li><b>8</b> 八 <span class="py">bā</span> созвучно с 发 <span class="py">fā</span> «богатеть». Номера телефонов и машин с восьмерками стоят дороже.</li>
+        <li><b>6</b> 六 <span class="py">liù</span> напоминает 流 <span class="py">liú</span> «течь»: «все идет гладко». В интернете 666 значит «круто, мастерски».</li>
+        <li><b>9</b> 九 <span class="py">jiǔ</span> звучит как 久 «долго» — пожелание долгой жизни и любви.</li>
+        <li><b>4</b> 四 <span class="py">sì</span> похоже на 死 <span class="py">sǐ</span> «смерть». Четвертых этажей в домах часто нет.</li>
+        <li><b>520</b> <span class="py">wǔ èr líng</span> похоже на 我爱你 «я тебя люблю», поэтому 20 мая (5.20) — интернет-день влюбленных.</li>
+      </ul>
+      <aside class="note culture">
+        <p>В номерах телефонов 一 читают <span class="py">yāo</span>, а не <span class="py">yī</span>, чтобы не спутать на слух с 七 <span class="py">qī</span>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Новые иероглифы</h2>
+      <div data-cards></div>
+    </section>
+
+    <section>
+      <h2>Слова из знакомых знаков</h2>
+      <ul data-words>
+        <li data-hz="四十" data-py="sìshí">сорок</li>
+        <li data-hz="五十五" data-py="wǔshíwǔ">пятьдесят пять</li>
+        <li data-hz="一百" data-py="yìbǎi">сто</li>
+        <li data-hz="两个人" data-py="liǎng ge rén">два человека</li>
+        <li data-hz="几个人" data-py="jǐ ge rén">сколько человек?</li>
+        <li data-hz="十个" data-py="shí ge">десять штук</li>
+        <li data-hz="九百九十九" data-py="jiǔbǎi jiǔshíjiǔ">девятьсот девяносто девять</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Практика</h2>
+      <div data-exercises="meaning char pinyin order write" data-count="12"></div>
+    </section>
+
+    <section class="summary">
+      <h2>Итог урока</h2>
+      <ul>
+        <li>Числа строятся как конструктор: 二十一 = 2 × 10 + 1.</li>
+        <li>Сто — 一百, десять тысяч — 万.</li>
+        <li>При счете предметов «два» — 两, а между числом и предметом стоит счетное слово: 两个人.</li>
+        <li>Изучены знаки 四 五 百 两 几 个.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>
