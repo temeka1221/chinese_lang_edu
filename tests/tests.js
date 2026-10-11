@@ -2,7 +2,7 @@
 import { loadChars } from '../js/data.js';
 import { buildSession, makeQuestion, soundSession, toneSession } from '../js/exercises.js';
 import { strokeViewer } from '../js/hanzi.js';
-import { INTERVALS, schedule } from '../js/progress.js';
+import { INTERVALS, exportProgress, importProgress, load, schedule } from '../js/progress.js';
 import { colorize, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
 
 const results = [];
@@ -91,6 +91,19 @@ await test('коробки Лейтнера', () => {
   eq(schedule({ box: 1 }, true, now), { box: 2, due: today + 3 * D });
   eq(schedule({ box: 4 }, false, now), { box: 1, due: today + D });
   eq(schedule({ box: 5 }, true, now), { box: 5, due: today + 30 * D });
+});
+
+await test('прогресс: файл выгружается и загружается обратно, мусор отклоняется', () => {
+  const saved = exportProgress();
+  try {
+    importProgress(JSON.stringify({ lessons: { '02': { done: true } }, cards: { 人: { box: 3, due: 1 } } }));
+    eq(load().cards['人'].box, 3);
+    let failed = false;
+    try { importProgress('{"hello": 1}'); } catch { failed = true; }
+    ok(failed, 'файл без lessons и cards принят');
+  } finally {
+    importProgress(saved);
+  }
 });
 
 const chars = await loadChars();

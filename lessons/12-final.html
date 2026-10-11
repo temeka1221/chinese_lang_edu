@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Урок 12 · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../css/course.css">
+  <script src="../vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="../js/lesson.js"></script>
+</head>
+<body data-lesson="12">
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main class="lesson">
+    <header class="lesson-head">
+      <p class="goals-title">После урока:</p>
+      <ul class="goals">
+        <li>видно, что из этапа усвоено прочно, а что стоит повторить;</li>
+        <li>все 61 иероглиф проверены на значение, чтение, порядок черт и письмо;</li>
+        <li>понятно, что ждет во втором этапе.</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Что пройдено за этап</h2>
+      <ul>
+        <li><b>Звуки:</b> четыре тона и легкий (урок 1), семьи согласных и ловушки пиньиня (урок 3), правила записи и изменения тонов (урок 5).</li>
+        <li><b>Письмо:</b> шесть основных черт (урок 2), сложные черты (урок 4), семь правил порядка и исключения (урок 6).</li>
+        <li><b>Устройство знаков:</b> картинки, указатели и смысловые сочетания (урок 7), ключи и звуковые подсказки (урок 8).</li>
+        <li><b>Речь:</b> числа до 999 и счетные слова (урок 9), знакомство (урок 10), семья (урок 11).</li>
+        <li><b>Иероглифы:</b> 61 знак — все они собраны в словаре.</li>
+      </ul>
+      <aside class="note analogy">
+        <p>Итоговый тест — не экзамен, а рентген: он показывает, какие знаки уже стали «своими», а какие пока держатся на подсказках. Ошибки из теста стоит разобрать по карточкам: у каждой есть ассоциация, история и тренажер.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Итоговый тест: иероглифы</h2>
+      <p>Двадцать заданий по всем знакам этапа: значение, чтение, порядок черт и письмо по памяти. Кнопка «Новая серия» каждый раз собирает другой набор.</p>
+      <div data-exercises="meaning char pinyin order write" data-from="all" data-count="20" data-title="Итоговый тест"></div>
+    </section>
+
+    <section>
+      <h2>Тоны на слух</h2>
+      <div data-exercises="tone" data-count="12" data-title="Тоны на слух"
+           data-syllables="ma1 ma2 ma3 ma4 ba1 ba2 ba3 ba4 yi1 yi2 yi3 yi4 da1 da2 da3 da4 shi1 shi2 shi3 shi4 tang1 tang2 tang3 tang4 ni3 hao3 ren2 liu4 san1 er4"></div>
+    </section>
+
+    <section>
+      <h2>Звуки на слух</h2>
+      <div data-exercises="sound" data-count="10" data-title="Звуки на слух"
+           data-sets="ba1/pa1 da4/ta4 ge1/ke1 ji1/qi1/xi1 zhi1/chi1/shi1 zi1/ci1/si1 zhi1/zi1/ji1 shi1/si1/xi1 lu4/lv4 fan1/fang1 xin1/xing1 nu3/nv3"></div>
+    </section>
+
+    <section>
+      <h2>Теория одним взглядом</h2>
+      <div class="check" data-answer="2">
+        <p>Как на самом деле звучит 你好?</p>
+        <ol><li>nǐ hǎo</li><li>ní hǎo</li><li>nǐ hào</li></ol>
+        <p class="why">Два третьих тона подряд: первый произносится вторым. Пишется <span class="py">nǐ hǎo</span>, звучит <span class="py">ní hǎo</span>.</p>
+      </div>
+      <div class="check" data-answer="1">
+        <p>Как читается 一个?</p>
+        <ol><li>yí ge</li><li>yī ge</li><li>yì ge</li></ol>
+        <p class="why">Перед четвертым тоном 一 звучит вторым: <span class="py">yí ge</span>.</p>
+      </div>
+      <div class="check" data-answer="3">
+        <p>Какая черта в 回 пишется последней?</p>
+        <ol><li>Нижняя черта маленького квадрата</li><li>Левая вертикаль</li><li>Нижняя черта большой рамки</li></ol>
+        <p class="why">Сначала зайти в дом, потом закрыть дверь: дно большой рамки — последняя черта.</p>
+      </div>
+      <div class="check" data-answer="1">
+        <p>С чем, скорее всего, связан незнакомый знак 海?</p>
+        <ol><li>С водой</li><li>С огнем</li><li>С речью</li></ol>
+        <p class="why">Слева ключ 氵 «вода». 海 <span class="py">hǎi</span> — «море».</p>
+      </div>
+      <div class="check" data-answer="2">
+        <p>Какой из знаков устроен как «смысл + звук»?</p>
+        <ol><li>山</li><li>妈</li><li>休</li></ol>
+        <p class="why">妈 = 女 «женщина» (смысл) + 马 <span class="py">mǎ</span> (звук). 山 — картинка, 休 — смысловое сочетание.</p>
+      </div>
+      <div class="check" data-answer="3">
+        <p>Как спросить «Как тебя зовут?»</p>
+        <ol><li>你叫什么名字吗？</li><li>什么你叫名字？</li><li>你叫什么名字？</li></ol>
+        <p class="why">什么 стоит на месте ответа, порядок слов как в утверждении. С 什么 частица 吗 не нужна.</p>
+      </div>
+      <div class="check" data-answer="2">
+        <p>Как сказать «два человека»?</p>
+        <ol><li>二人个</li><li>两个人</li><li>二个人</li></ol>
+        <p class="why">При счете предметов «два» — 两, а между числом и предметом стоит счетное слово 个.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Что дальше</h2>
+      <p>Второй этап продолжает ту же схему уроков и добавляет около сотни знаков и первые связные тексты:</p>
+      <ul>
+        <li><b>время и даты:</b> дни недели, «который час», «сегодня» и «завтра»;</li>
+        <li><b>еда и покупки:</b> «сколько стоит», деньги, «я хочу…»;</li>
+        <li><b>движение:</b> куда, откуда, на чем;</li>
+        <li><b>первые тексты</b> для чтения только из знакомых знаков.</li>
+      </ul>
+      <aside class="note rule">
+        <p>Между этапами главное — не останавливать повторение. Несколько минут в день на странице «Повторение» сохраняют все 61 знак, пока готовится следующий этап.</p>
+      </aside>
+      <aside class="note culture">
+        <p>В помощь курсу хорошо подходит бесплатный словарь Pleco для телефона: в нем есть рукописный ввод (знак рисуется пальцем в правильном порядке черт) и примеры употребления слов.</p>
+      </aside>
+    </section>
+
+    <section class="summary">
+      <h2>Итог этапа</h2>
+      <ul>
+        <li>Звуки, тоны и пиньинь больше не загадка.</li>
+        <li>Любой новый знак раскладывается на черты, а черты пишутся в правильном порядке.</li>
+        <li>Ключи и звуковые части подсказывают смысл и чтение незнакомых знаков.</li>
+        <li>61 иероглиф и первые разговоры: знакомство, числа, семья.</li>
+      </ul>
+      <div data-done></div>
+    </section>
+  </main>
+</body>
+</html>

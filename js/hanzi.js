@@ -77,16 +77,23 @@ function arrow(g, median) {
 }
 
 // Номера черт у их начала, чуть снаружи, против направления движения кисти.
+// Если номер накрывает уже поставленный, он отходит дальше или в сторону.
 function numbers(svg, data, tf, idxs, cls) {
   const layer = svgEl('g', { class: cls }, svg);
+  const placed = [];
+  const clamp = (v) => Math.min(S - 11, Math.max(11, v));
   for (const i of idxs) {
     const m = data.medians[i];
     const [x0, y0] = m[0];
     const [x1, y1] = m[Math.min(2, m.length - 1)];
     const len = Math.hypot(x0 - x1, y0 - y1) || 1;
-    const clamp = (v) => Math.min(S - 11, Math.max(11, v));
-    const cx = clamp(tf.x + x0 * tf.scale + ((x0 - x1) / len) * 13);
-    const cy = clamp(S - tf.y - y0 * tf.scale - ((y0 - y1) / len) * 13);
+    const [dx, dy] = [(x0 - x1) / len, -(y0 - y1) / len]; // на экране ось y смотрит вниз
+    const sx = tf.x + x0 * tf.scale;
+    const sy = S - tf.y - y0 * tf.scale;
+    const spots = [[13, 0], [24, 0], [13, 15], [13, -15], [35, 0], [24, 22], [24, -22]]
+      .map(([along, side]) => [clamp(sx + dx * along - dy * side), clamp(sy + dy * along + dx * side)]);
+    const [cx, cy] = spots.find(([x, y]) => placed.every(([px, py]) => Math.hypot(x - px, y - py) >= 20)) ?? spots[0];
+    placed.push([cx, cy]);
     svgEl('circle', { cx, cy, r: 10 }, layer);
     svgEl('text', { x: cx, y: cy }, layer).textContent = i + 1;
   }

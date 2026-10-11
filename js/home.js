@@ -1,6 +1,6 @@
-// Главная: продолжение курса, карта уроков, сброс прогресса.
+// Главная: продолжение курса, карта уроков, перенос и сброс прогресса.
 import { loadChars, loadLessons } from './data.js';
-import { dueCards, load, reset } from './progress.js';
+import { dueCards, exportProgress, importProgress, load, reset } from './progress.js';
 import { h, initPage, pageUrl, plural } from './ui.js';
 
 initPage();
@@ -37,6 +37,27 @@ for (const l of lessons) {
       h('span', {}, h('span', { class: 'lesson-title' }, l.title), h('span', { class: 'lesson-about' }, l.about)),
       h('span', { class: 'lesson-time' }, `${l.minutes} мин${st?.score != null ? ` · ${Math.round(st.score * 100)}%` : ''}`))));
 }
+
+document.querySelector('[data-export]').addEventListener('click', () => {
+  const url = URL.createObjectURL(new Blob([exportProgress()], { type: 'application/json' }));
+  h('a', { href: url, download: `kitajskij-progress-${new Date().toISOString().slice(0, 10)}.json` }).click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+const picker = h('input', { type: 'file', accept: '.json,application/json', hidden: true });
+document.body.append(picker);
+document.querySelector('[data-import]').addEventListener('click', () => picker.click());
+picker.addEventListener('change', async () => {
+  const file = picker.files[0];
+  picker.value = '';
+  if (!file || !confirm('Загрузить прогресс из файла? Текущий прогресс в этом браузере заменится.')) return;
+  try {
+    importProgress(await file.text());
+    location.reload();
+  } catch (e) {
+    alert(`Файл не загружен: ${e.message}.`);
+  }
+});
 
 document.querySelector('[data-reset]').addEventListener('click', () => {
   if (confirm('Сбросить прогресс уроков и повторения в этом браузере?')) {

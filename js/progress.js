@@ -64,3 +64,19 @@ export const dueCards = (s = load(), now = Date.now()) =>
 export function reset() {
   write({});
 }
+
+// Весь прогресс одной строкой JSON: для переноса на другое устройство или новый адрес сайта.
+export const exportProgress = () => JSON.stringify(load());
+
+export function importProgress(text) {
+  let s;
+  try {
+    s = JSON.parse(text);
+  } catch {
+    s = null;
+  }
+  if (!s || typeof s !== 'object' || typeof s.lessons !== 'object' || typeof s.cards !== 'object') {
+    throw new Error('это не файл прогресса курса');
+  }
+  write(s);
+}
