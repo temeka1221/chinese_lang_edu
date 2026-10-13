@@ -244,6 +244,16 @@ aside.note.culture::before { content: "🏮 Культура"; }
 .tb5 { border-top-color: var(--t5); }
 .tone-ex { line-height: 2.2; }
 .tone-ex > span { white-space: nowrap; }
+.tones.pairs { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+/* Числовые коды */
+.codes { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 12px 0; }
+.code { padding: 10px 14px; border-radius: 12px; background: var(--paper); }
+.code p { margin: 4px 0; }
+.code .code-num { margin: 0; color: var(--accent); font-size: 26px; font-weight: 700; line-height: 1.2; }
+.code-hz { font-size: 22px; }
+.code-hz .hz { border-bottom: 0; }
+.code-ru { color: var(--muted); }
 
 /* Варианты ответа */
 .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }

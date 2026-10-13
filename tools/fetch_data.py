@@ -23,7 +23,7 @@ CJK = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 SAY = re.compile(r'data-(?:say|hz)="([^"]+)"')
 SYLLABLE = re.compile(r"^[a-zv]+[1-5]$")
 SYLLABLES = re.compile(r'data-(?:syllables|sets)="([^"]+)"')
-WORD_PAIR = re.compile(r'data-hz="([^"]+)" data-py="([^"]+)"')
+WORD_PAIR = re.compile(r'data-(?:hz|say)="([^"]+)" data-py="([^"]+)"')
 TONE_MARKS = {"\u0304": 1, "\u0301": 2, "\u030c": 3, "\u0300": 4}
 VOWELS = "aeiouüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ"
 PINYIN_SYLLABLE = re.compile(
