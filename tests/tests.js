@@ -3,7 +3,7 @@ import { loadChars } from '../js/data.js';
 import { buildSession, makeQuestion, soundSession, toneSession } from '../js/exercises.js';
 import { strokeViewer } from '../js/hanzi.js';
 import { INTERVALS, exportProgress, importProgress, load, schedule } from '../js/progress.js';
-import { colorize, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
+import { colorize, fallbackKeys, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
 
 const results = [];
 
@@ -41,6 +41,16 @@ await test('тон по знаку над гласной', () => {
 
 await test('слог в имя файла записи', () => {
   eq(['mù', 'nǚ', 'lǜ', 'ma', 'Zhōng'].map(numbered), ['mu4', 'nv3', 'lv4', 'ma5', 'zhong1']);
+});
+
+await test('запасные слоги: два третьих тона подряд и замена легкого тона', () => {
+  const has = (k) => ['le4', 'bu2', 'bu4'].includes(k);
+  eq(fallbackKeys('wǒ xiǎng nǐ', has), ['wo2', 'xiang2', 'ni3']);
+  eq(fallbackKeys('shuǐjiǎo', has), ['shui2', 'jiao3']);
+  eq(fallbackKeys('Nǐ hǎo! Wǒ hěn hǎo.', has), ['ni2', 'hao3', 'wo2', 'hen2', 'hao3']);
+  eq(fallbackKeys('báibái le', has), ['bai2', 'bai2', 'le4']);
+  eq(fallbackKeys('shì bu shì', has), ['shi4', 'bu4', 'shi4']);
+  eq(fallbackKeys('shénme', has), ['shen2', 'me5']);
 });
 
 await test('знак тона ставится на нужную гласную', () => {

@@ -243,17 +243,18 @@ aside.note.culture::before { content: "🏮 Культура"; }
 .tb4 { border-top-color: var(--t4); }
 .tb5 { border-top-color: var(--t5); }
 .tone-ex { line-height: 2.2; }
-.tone-ex > span { white-space: nowrap; }
-.tones.pairs { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.tone-ex > span { display: inline-block; }
+.tones.pairs { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
 
 /* Числовые коды */
 .codes { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 12px 0; }
 .code { padding: 10px 14px; border-radius: 12px; background: var(--paper); }
 .code p { margin: 4px 0; }
 .code .code-num { margin: 0; color: var(--accent); font-size: 26px; font-weight: 700; line-height: 1.2; }
-.code-hz { font-size: 22px; }
-.code-hz .hz { border-bottom: 0; }
-.code-ru { color: var(--muted); }
+.code .words li { padding: 0; border: 0; gap: 0 8px; }
+.code .words .say { order: 1; }
+.code .word-py { order: 2; flex-basis: 100%; }
+.code .word-ru { order: 3; }
 
 /* Варианты ответа */
 .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
