@@ -100,6 +100,26 @@ const fileOf = (key) => {
   return null;
 };
 
+// Части фразы загружаются сразу все, а не каждая после окончания предыдущей.
+function prefetch(files) {
+  if (files.length > 1) new Set(files).forEach((f) => fetch(dataUrl(f)).catch(() => {}));
+}
+
+// Слоги носителя для слова без записи. Два третьих тона подряд внутри фразы: первый звучит как второй.
+// Легкого тона в записях почти нет, вместо него звучит тот же слог с другим тоном.
+// has(key) сообщает, есть ли запись слога; то же правило повторяет tools/fetch_data.py.
+const STAND_IN = [4, 1, 2, 3];
+export function fallbackKeys(pinyin, has) {
+  return pinyin.split(/[,.!?;:，。！？；：、]/).flatMap((phrase) => {
+    const keys = syllablesOf(phrase).map(numbered);
+    return keys.map((k, i) => {
+      if (k.endsWith('3') && keys[i + 1]?.endsWith('3')) return `${k.slice(0, -1)}2`;
+      if (k.endsWith('5') && !has(k)) return STAND_IN.map((t) => k.slice(0, -1) + t).find(has) ?? k;
+      return k;
+    });
+  });
+}
+
 function play(file) {
   player ??= new Audio();
   return new Promise((resolve) => {
@@ -117,6 +137,7 @@ export async function say(key, pinyin) {
   player?.pause();
   window.speechSynthesis?.cancel();
   const parts = key.trim().split(/\s+/);
+  prefetch(parts.map(fileOf).filter(Boolean));
   for (const part of parts) {
     if (my !== turn) return;
     await sayOne(part, parts.length === 1 ? pinyin : null, () => my === turn);
@@ -128,9 +149,10 @@ async function sayOne(key, pinyin, current) {
   const file = fileOf(key) ?? (syl.length === 1 ? fileOf(numbered(syl[0])) : null);
   if (file) return play(file);
   if (SYLLABLE_KEY.test(key) || await speak(key)) return;
-  const keys = syl.map(numbered);
-  if (keys.length && keys.every(fileOf)) {
-    for (const k of keys) if (current()) await play(fileOf(k));
+  const files = fallbackKeys(pinyin ?? '', (k) => manifest.syl.includes(k)).map(fileOf);
+  if (files.length && files.every(Boolean)) {
+    prefetch(files);
+    for (const f of files) if (current()) await play(f);
     return;
   }
   if (!warned) {

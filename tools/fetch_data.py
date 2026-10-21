@@ -2,7 +2,8 @@
 """Скачивает контуры черт и записи для всех иероглифов курса и проверяет данные.
 
 Запуск из любого каталога: python3 tools/fetch_data.py
-Уже скачанные файлы повторно не загружаются.
+Уже скачанные файлы повторно не загружаются. Адреса, которых нет в источниках, запоминаются
+в tools/missing.json и тоже не запрашиваются; ключ --refresh проверяет их заново.
 """
 import json
 import math
@@ -18,29 +19,38 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 HANZI_URL = "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/"
 AUDIO_URL = "https://raw.githubusercontent.com/hugolpz/audio-cmn/master/64k/"
+MISSING = ROOT / "tools" / "missing.json"
 
 CJK = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 SAY = re.compile(r'data-(?:say|hz)="([^"]+)"')
 SYLLABLE = re.compile(r"^[a-zv]+[1-5]$")
 SYLLABLES = re.compile(r'data-(?:syllables|sets)="([^"]+)"')
-WORD_PAIR = re.compile(r'data-(?:hz|say)="([^"]+)" data-py="([^"]+)"')
+TAG = re.compile(r"<[^>]+>")
+ATTR = re.compile(r'(data-(?:hz|say|py))="([^"]*)"')
+PHRASE_BREAK = re.compile(r"[,.!?;:，。！？；：、]")
+STAND_IN = "4123"  # легкий тон, которого нет в записях, заменяется тем же слогом с другим тоном
 TONE_MARKS = {"\u0304": 1, "\u0301": 2, "\u030c": 3, "\u0300": 4}
 VOWELS = "aeiouüāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ"
 PINYIN_SYLLABLE = re.compile(
     f"(?:[zcs]h|[bpmfdtnlgkhjqxrzcsyw])?[{VOWELS}]+(?:ng(?![{VOWELS}])|n(?![{VOWELS}])|r(?![{VOWELS}]))?", re.I)
 
 errors, warnings = [], []
+known_missing, missing_now = set(), set()
 
 
 def download(url, path):
     """Скачивает файл, если его еще нет. Возвращает False, если источник ответил 404."""
     if path.exists():
         return True
+    if url in known_missing:
+        missing_now.add(url)
+        return False
     try:
         with urllib.request.urlopen(url, timeout=30) as resp:
             body = resp.read()
     except urllib.error.HTTPError as e:
         if e.code == 404:
+            missing_now.add(url)
             return False
         raise
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -108,7 +118,29 @@ def load_json(name):
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
+def word_pairs(text):
+    """Пары (слово, пиньинь) из тегов с data-py, порядок атрибутов любой."""
+    for tag in TAG.findall(text):
+        attrs = dict(ATTR.findall(tag))
+        key = attrs.get("data-hz") or attrs.get("data-say")
+        if key and "data-py" in attrs:
+            yield key, attrs["data-py"]
+
+
+def fallback_keys(py):
+    """Слоги, которыми звучит слово без записи. Правило то же, что в fallbackKeys из js/ui.js:
+    два третьих тона подряд внутри фразы, и первый звучит как второй."""
+    keys = []
+    for phrase in PHRASE_BREAK.split(py):
+        tones = [numbered(s) for s in PINYIN_SYLLABLE.findall(phrase)]
+        keys += [k[:-1] + "2" if k.endswith("3") and tones[i + 1:i + 2] and tones[i + 1].endswith("3") else k
+                 for i, k in enumerate(tones)]
+    return keys
+
+
 def main():
+    if "--refresh" not in sys.argv[1:] and MISSING.exists():
+        known_missing.update(json.loads(MISSING.read_text(encoding="utf-8")))
     course = load_json("course.json")
     chars = load_json("chars.json")
     types = load_json("stroke-types.json")
@@ -165,11 +197,6 @@ def main():
     word_keys = set(chars) | {w[0] for e in chars.values() for w in e.get("words", [])}
     word_keys |= {k for k in say_keys if CJK.search(k)}
     syl_keys = {k for k in say_keys if SYLLABLE.match(k)}
-    # Слоги для запасного варианта: если у слова нет записи и нет китайского голоса, оно звучит по слогам.
-    words = [w[:2] for e in chars.values() for w in e.get("words", [])]
-    words += [pair for p, t in texts.items() if p.suffix == ".html" for pair in WORD_PAIR.findall(t)]
-    fallback_syl = {numbered(e["pinyin"]) for e in chars.values()}
-    fallback_syl |= {numbered(s) for _, py in words for s in PINYIN_SYLLABLE.findall(py)}
     manifest = {"word": [], "syl": []}
     missing_words = []
     for key in sorted(word_keys):
@@ -177,12 +204,39 @@ def main():
             manifest["word"].append(key)
         else:
             missing_words.append(key)
-    for key in sorted(syl_keys | fallback_syl):
-        if download(AUDIO_URL + "syllabs/cmn-" + key + ".mp3", DATA / "audio" / "syl" / f"{key}.mp3"):
-            manifest["syl"].append(key)
+
+    # Запасной вариант: слово без записи в браузере без китайского голоса звучит слогами носителя.
+    words = [w[:2] for e in chars.values() for w in e.get("words", [])]
+    words += [pair for p, t in texts.items() if p.suffix == ".html" for pair in word_pairs(t)]
+    unrecorded = {ch: [numbered(e["pinyin"])] for ch, e in chars.items() if ch not in manifest["word"]}
+    unrecorded |= {hz: fallback_keys(py) for hz, py in words if hz not in manifest["word"]}
+
+    def fetch_syl(key):
+        return download(AUDIO_URL + "syllabs/cmn-" + key + ".mp3", DATA / "audio" / "syl" / f"{key}.mp3")
+
+    have = set()
+    for key in sorted(syl_keys | {k for keys in unrecorded.values() for k in keys}):
+        if fetch_syl(key):
+            have.add(key)
         elif key in syl_keys:
             errors.append(f"слог {key} из упражнений не найден в audio-cmn")
+        elif key.endswith("5"):
+            stand_in = next((key[:-1] + t for t in STAND_IN if fetch_syl(key[:-1] + t)), None)
+            if stand_in:
+                have.add(stand_in)
+    manifest["syl"] = sorted(have)
     (DATA / "audio" / "index.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    MISSING.write_text(json.dumps(sorted(missing_now), ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+    def playable(key):
+        return key in have or key.endswith("5") and any(key[:-1] + t in have for t in STAND_IN)
+
+    silent = sorted(w for w, keys in unrecorded.items() if not all(map(playable, keys)))
+    if silent:
+        warnings.append(f"без записи и без китайского голоса не прозвучат (слогов нет в audio-cmn): {' '.join(silent)}")
+    extra = sorted(f.stem for f in (DATA / "audio" / "syl").glob("*.mp3") if f.stem not in have)
+    if extra:
+        warnings.append(f"записи слогов, которые курсу не нужны: {' '.join(extra)}")
 
     print(f"Иероглифов в курсе: {len(chars)}, всего знаков с контурами: {len(strokes)}")
     print(f"Записей слов: {len(manifest['word'])}, слогов: {len(manifest['syl'])}")
