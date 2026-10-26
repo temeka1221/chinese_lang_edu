@@ -175,7 +175,7 @@ export async function strokeViewer(ch, { step: startStep = 0 } = {}) {
       animateStroke(g, data.strokes[cur], data.medians[cur], animate && !reduceMotion, () => arrow(g, data.medians[cur]));
       numbers(svg, data, tf, [cur], 'num num-current');
       const t = names && types[names[cur]];
-      setCaption(`<b>Черта ${step} из ${n}</b>${t ? ` · <span lang="zh-CN">${names[cur]}</span> ${t.pinyin} — ${t.ru}` : ''}`
+      setCaption(`<b>Черта ${step} из ${n}</b>${t ? ` · <span lang="zh-CN">${names[cur]}</span> ${t.pinyin} (${t.cyr}) — ${t.ru}` : ''}`
         + (t ? `<p>${esc(t.how)}</p><p class="muted">Образ: ${esc(t.like)}</p>` : ''));
     }
     prev.disabled = step === 0;
@@ -237,12 +237,19 @@ export function wordList(words) {
 // mnemonic — список образов, sound — зацепка для чтения и тона.
 const NOTES = [['mnemonic', 'Ассоциации'], ['sound', 'Как запомнить чтение'], ['origin', 'История'], ['write', 'Как писать'], ['trap', 'Не перепутать']];
 
-const noteBody = (value) => (Array.isArray(value)
-  ? h('ul', {}, value.map((v) => h('li', { html: hzLinks(v) })))
-  : h('p', { html: hzLinks(value) }));
+const noteBody = (value, annotate) => (Array.isArray(value)
+  ? h('ul', {}, value.map((v) => h('li', { html: hzLinks(annotate(v)) })))
+  : h('p', { html: hzLinks(annotate(value)) }));
+
+// В подсказках «Как писать» и «Не перепутать» после названия черты стоит русская транскрипция: 竖 (шу).
+const STROKE_NOTES = ['write', 'trap'];
+export function withStrokeCyr(text, types) {
+  const names = Object.keys(types).sort((a, b) => b.length - a.length);
+  return text.replace(new RegExp(names.join('|'), 'g'), (name) => `${name} (${types[name].cyr})`);
+}
 
 export async function charCard(ch, { step } = {}) {
-  const e = (await loadChars())[ch];
+  const [e, types] = await Promise.all([loadChars().then((all) => all[ch]), loadStrokeTypes()]);
   const facts = [`${e.strokes.length} ${strokesWord(e.strokes.length)}`, `ключ ${e.radical}`, KIND[e.kind],
     e.parts && `состав ${e.parts.join(' + ')}`, e.trad && `полная форма ${e.trad}`];
   return h('article', { class: 'card', id: `char-${ch}` },
@@ -254,7 +261,8 @@ export async function charCard(ch, { step } = {}) {
           h('div', { class: 'card-py', html: pinyinHtml(e.pinyin) }, sayButton(ch, e.pinyin)),
           h('div', { class: 'card-meaning' }, e.meaning, e.emoji ? ` ${e.emoji}` : ''),
           h('div', { class: 'card-facts', html: hzLinks(facts.filter(Boolean).join(' · ')) }))),
-      NOTES.filter(([k]) => e[k]).map(([k, title]) => h('section', { class: `note ${k}` }, h('h4', {}, title), noteBody(e[k]))),
+      NOTES.filter(([k]) => e[k]).map(([k, title]) => h('section', { class: `note ${k}` }, h('h4', {}, title),
+        noteBody(e[k], (s) => (STROKE_NOTES.includes(k) ? withStrokeCyr(s, types) : s)))),
       e.words?.length ? h('section', { class: 'card-words' }, h('h4', {}, 'Слова'), wordList(e.words)) : null));
 }
 
@@ -306,7 +314,7 @@ export async function strokeTypeTable(group) {
     return h('button', { type: 'button', class: 'stroke-type', onclick: () => popupChar(ch, idx + 1) },
       h('span', { class: 'type-pic grid' }, miniChar(data[i], { current: idx })),
       h('span', { class: 'type-text' },
-        h('span', { class: 'type-name' }, h('span', { lang: 'zh-CN' }, name), ` ${t.pinyin}`),
+        h('span', { class: 'type-name' }, h('span', { lang: 'zh-CN' }, name), ` ${t.pinyin} (${t.cyr})`),
         h('span', { class: 'type-ru' }, t.ru),
         h('span', { class: 'type-how' }, t.how),
         h('span', { class: 'type-like' }, `Образ: ${t.like}`)));

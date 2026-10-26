@@ -1,7 +1,7 @@
 // Тесты логики курса. Открываются через сервер: http://localhost:8000/tests/
-import { loadChars } from '../js/data.js';
+import { loadChars, loadStrokeTypes } from '../js/data.js';
 import { buildSession, makeQuestion, soundSession, toneSession } from '../js/exercises.js';
-import { strokeViewer } from '../js/hanzi.js';
+import { strokeViewer, withStrokeCyr } from '../js/hanzi.js';
 import { INTERVALS, exportProgress, importProgress, load, schedule } from '../js/progress.js';
 import { colorize, fallbackKeys, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
 
@@ -153,6 +153,12 @@ await test('звук на слух: правильный слог среди в�
   for (const q of s) ok(q.options.includes(q.answer) && q.options.length >= 2, `вопрос ${JSON.stringify(q)}`);
 });
 
+await test('названия черт с русской транскрипцией', async () => {
+  const types = await loadStrokeTypes();
+  ok(Object.values(types).every((t) => t.cyr), 'у каждой черты есть транскрипция');
+  eq(withStrokeCyr('Рамка: 竖, 横折钩. Последней — 横.', types), 'Рамка: 竖 (шу), 横折钩 (хэн-чжэ-гоу). Последней — 横 (хэн).');
+});
+
 await test('тренажер: обзор, шаг вперед, подпись с названием черты', async () => {
   const v = await strokeViewer('十');
   document.body.append(v);
@@ -161,7 +167,7 @@ await test('тренажер: обзор, шаг вперед, подпись с
   v.querySelector('[title="Следующая черта"]').click();
   ok(v.querySelector('.st-anim'), 'нет анимированной черты');
   const text = v.querySelector('.caption').textContent;
-  ok(text.includes('Черта 1 из 2') && text.includes('横'), `подпись: ${text}`);
+  ok(text.includes('Черта 1 из 2') && text.includes('横 héng (хэн)'), `подпись: ${text}`);
   v.remove();
 });
 

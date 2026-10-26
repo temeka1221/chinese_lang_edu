@@ -166,7 +166,7 @@ async function render(q, box, chars, done) {
         h('div', { class: 'quiz-pic grid' }, miniChar(data, { done: q.k })),
         choices(q.options, q.answer, (i) => h('span', { class: 'grid option-pic' }, miniChar(data, { done: q.k, current: i })),
           (ok) => done(ok, h('div', { class: 'quiz-note' }, `Черта ${q.k + 1}: `, h('span', { lang: 'zh-CN' }, name),
-            ` ${types[name].pinyin} — ${types[name].ru}.`)), 'pics'));
+            ` ${types[name].pinyin} (${types[name].cyr}) — ${types[name].ru}.`)), 'pics'));
       break;
     }
     case 'write': {
