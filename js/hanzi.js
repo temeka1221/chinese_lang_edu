@@ -127,8 +127,12 @@ function frames(data, onPick) {
 }
 
 // Лента в тексте урока: <span data-frames="十"></span>. Клик открывает знак на нужном шаге.
-export async function framesStrip(ch) {
-  return h('span', { class: 'strip inline-strip', lang: 'zh-CN' }, frames(await loadHanzi(ch), (k) => popupChar(ch, k)));
+// Пустые кадры занимают место сразу (count — число черт, если оно известно), рисунки приходят позже.
+export function framesStrip(ch, count = 0) {
+  const strip = h('span', { class: 'strip inline-strip', lang: 'zh-CN' },
+    Array.from({ length: count }, () => h('span', { class: 'frame grid' })));
+  loadHanzi(ch).then((data) => strip.replaceChildren(...frames(data, (k) => popupChar(ch, k))), () => strip.remove());
+  return strip;
 }
 
 const MODES = [['steps', 'По шагам'], ['animate', 'Целиком'], ['trace', 'Обводка'], ['memory', 'По памяти']];
@@ -223,6 +227,15 @@ export async function strokeViewer(ch, { step: startStep = 0 } = {}) {
   return root;
 }
 
+// Место под тренажер занято сразу, сам он появляется, когда загрузятся контуры черт.
+// Сбой загрузки оставляет на этом месте пояснение и не мешает остальной странице.
+export function viewerSlot(ch, opts) {
+  const slot = h('div', { class: 'viewer-slot muted' }, 'Тренажер черт загружается…');
+  strokeViewer(ch, opts).then((v) => slot.replaceWith(v),
+    () => slot.replaceChildren(`Порядок черт знака ${ch} не загрузился. Обычно помогает обновление страницы.`));
+  return slot;
+}
+
 // Китайские знаки в тексте становятся ссылками на всплывающее окно с порядком черт.
 export const hzLinks = (text) => esc(text).replace(/[\u3400-\u4dbf\u4e00-\u9fff]/g, (c) => `<span class="hz" lang="zh-CN">${c}</span>`);
 
@@ -253,7 +266,7 @@ export async function charCard(ch, { step } = {}) {
   const facts = [`${e.strokes.length} ${strokesWord(e.strokes.length)}`, `ключ ${e.radical}`, KIND[e.kind],
     e.parts && `состав ${e.parts.join(' + ')}`, e.trad && `полная форма ${e.trad}`];
   return h('article', { class: 'card', id: `char-${ch}` },
-    h('div', { class: 'card-viewer' }, await strokeViewer(ch, { step })),
+    h('div', { class: 'card-viewer' }, viewerSlot(ch, { step })),
     h('div', { class: 'card-body' },
       h('header', { class: 'card-head' },
         h('div', { class: 'card-char', lang: 'zh-CN' }, ch),
@@ -308,11 +321,12 @@ export function enableCharPopups() {
 export async function strokeTypeTable(group) {
   const types = await loadStrokeTypes();
   const list = Object.entries(types).filter(([, t]) => (group === 'basic') === Boolean(t.basic));
-  const data = await Promise.all(list.map(([, t]) => loadHanzi(t.example[0])));
-  return h('div', { class: 'stroke-types' }, list.map(([name, t], i) => {
+  return h('div', { class: 'stroke-types' }, list.map(([name, t]) => {
     const [ch, idx] = t.example;
+    const pic = h('span', { class: 'type-pic grid' });
+    loadHanzi(ch).then((data) => pic.append(miniChar(data, { current: idx })), () => {});
     return h('button', { type: 'button', class: 'stroke-type', onclick: () => popupChar(ch, idx + 1) },
-      h('span', { class: 'type-pic grid' }, miniChar(data[i], { current: idx })),
+      pic,
       h('span', { class: 'type-text' },
         h('span', { class: 'type-name' }, h('span', { lang: 'zh-CN' }, name), ` ${t.pinyin} (${t.cyr})`),
         h('span', { class: 'type-ru' }, t.ru),

@@ -1,7 +1,7 @@
 // Страница урока: шапка из course.json, карточки, справочник черт, проверки, практика, итог и навигация.
-import { charsOf, loadChars, loadLessons } from './data.js';
+import { charsOf, loadChars, loadLessons, loadStrokeTypes } from './data.js';
 import { buildSession, runner, soundSession, toneSession } from './exercises.js';
-import { charCard, enableCharPopups, framesStrip, linkHanzi, strokeTypeTable, strokeViewer, wordList } from './hanzi.js';
+import { charCard, enableCharPopups, framesStrip, linkHanzi, strokeTypeTable, viewerSlot, wordList } from './hanzi.js';
 import { completeLesson, load, saveScore } from './progress.js';
 import { h, initPage, pageUrl, shuffle } from './ui.js';
 
@@ -9,7 +9,13 @@ initPage();
 enableCharPopups();
 
 const id = document.body.dataset.lesson;
-const [lessons, chars] = await Promise.all([loadLessons(), loadChars()]);
+// Три небольших файла, без которых урок не собрать. Контуры черт догружаются позже, каждый на свое место,
+// поэтому слова, проверки и практика не ждут их и не зависят от сбоя отдельной загрузки.
+const [lessons, chars] = await Promise.all([loadLessons(), loadChars(), loadStrokeTypes()]).catch((e) => {
+  document.querySelector('main').prepend(h('p', { class: 'load-error' },
+    'Данные курса не загрузились, поэтому карточки и упражнения не работают. Обычно помогает обновление страницы.'));
+  throw e;
+});
 const index = lessons.findIndex((l) => l.id === id);
 const lesson = lessons[index];
 const own = charsOf(chars, id);
@@ -29,11 +35,13 @@ for (const el of document.querySelectorAll('[data-cards]')) {
   el.append(...await Promise.all((el.dataset.cards ? [...el.dataset.cards] : own).map((ch) => charCard(ch))));
 }
 
-for (const el of document.querySelectorAll('[data-strokes]')) el.append(await strokeViewer(el.dataset.strokes));
+for (const el of document.querySelectorAll('[data-strokes]')) el.append(viewerSlot(el.dataset.strokes));
 
 for (const el of document.querySelectorAll('[data-stroke-types]')) el.append(await strokeTypeTable(el.dataset.strokeTypes));
 
-for (const el of document.querySelectorAll('[data-frames]')) el.replaceWith(await framesStrip(el.dataset.frames));
+for (const el of document.querySelectorAll('[data-frames]')) {
+  el.replaceWith(framesStrip(el.dataset.frames, chars[el.dataset.frames]?.strokes.length));
+}
 
 // <ul data-words><li data-hz="大人" data-py="dàrén">взрослый</li></ul>
 for (const el of document.querySelectorAll('[data-words]')) {
