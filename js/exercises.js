@@ -1,7 +1,7 @@
 // Упражнения: генерация вопросов и прохождение серии.
 import { loadHanzi, loadStrokeTypes } from './data.js';
 import { createWriter, hzLinks, miniChar } from './hanzi.js';
-import { h, keyToPinyin, pinyinHtml, say, sayButton, shuffle, toneOf, withTone } from './ui.js';
+import { h, keyToPinyin, pinyinHtml, plain, say, sayButton, shuffle, toneOf, withTone } from './ui.js';
 
 const TONE_NAMES = { 1: 'ˉ ровный высокий', 2: 'ˊ восходящий', 3: 'ˇ низкий', 4: 'ˋ падающий' };
 
@@ -20,9 +20,16 @@ export function makeQuestion(type, ch, chars, pool, rnd = Math.random) {
     case 'char':
       return { type, ch, options: shuffle([ch, ...others(3, (c) => c)], rnd), answer: ch };
     case 'pinyin': {
+      // Два слога в двух тонах: приходится вспомнить и слог, и тон. Второй слог по возможности похож на верный.
       const tone = toneOf(e.pinyin);
-      const options = [...new Set([1, 2, 3, 4, ...(tone === 5 ? [5] : [])].map((t) => withTone(e.pinyin, t)))];
-      return { type, ch, options: shuffle(options, rnd), answer: withTone(e.pinyin, tone) };
+      const base = plain(e.pinyin);
+      const others = shuffle(pool, rnd).map((c) => plain(chars[c].pinyin)).filter((p) => p !== base);
+      const other = others.find((p) => p[0] === base[0] || p.slice(-2) === base.slice(-2)) ?? others[0];
+      const wrongTone = shuffle([1, 2, 3, 4].filter((t) => t !== tone), rnd)[0];
+      const options = other
+        ? [base, other].flatMap((p) => [withTone(p, tone), withTone(p, wrongTone)])
+        : [1, 2, 3, 4, ...(tone === 5 ? [5] : [])].map((t) => withTone(base, t));
+      return { type, ch, options: shuffle(options, rnd), answer: withTone(base, tone) };
     }
     case 'order': {
       const n = e.strokes.length;

@@ -131,7 +131,11 @@ await test('в вариантах есть правильный ответ и н
       ok(q.options.includes(q.answer), `${ch}, ${type}: нет правильного ответа`);
       eq(new Set(q.options).size, q.options.length);
       if (type === 'meaning') eq(new Set(q.options.map((c) => chars[c].meaning)).size, q.options.length);
-      if (type === 'pinyin') ok(q.options.length >= 4, `${ch}: мало вариантов чтения`);
+      if (type === 'pinyin') {
+        eq(q.options.length, 4);
+        eq(q.answer, chars[ch].pinyin);
+        eq(new Set(q.options.map(plain)).size, 2); // два слога, каждый в двух тонах
+      }
       if (type === 'order') ok(q.options.every((i) => i >= q.k && i < chars[ch].strokes.length), `${ch}: черта вне знака`);
     }
   }
