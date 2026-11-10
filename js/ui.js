@@ -89,6 +89,16 @@ export function colorize(el) {
 
 export const syllablesOf = (pinyin) => pinyin.match(SYLLABLE) ?? [];
 
+// Слоги с пометками: word — слог начинает новое слово (перед ним пробел), start — новое предложение.
+export function syllableSpans(pinyin) {
+  let end = 0;
+  return [...pinyin.matchAll(SYLLABLE)].map((m, i) => {
+    const before = pinyin.slice(end, m.index);
+    end = m.index + m[0].length;
+    return { text: m[0], word: i === 0 || /\s/.test(before), start: i === 0 || /[.?!:…]/.test(before) };
+  });
+}
+
 let manifest;
 let player; // один элемент на всю страницу: iOS разрешает ему играть после первого нажатия
 let turn = 0; // новое нажатие прерывает то, что звучит сейчас

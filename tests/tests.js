@@ -1,6 +1,6 @@
 // Тесты логики курса. Открываются через сервер: http://localhost:8000/tests/
 import { loadChars, loadStrokeTypes, loadWords } from '../js/data.js';
-import { buildSession, makeQuestion, soundSession, toneSession } from '../js/exercises.js';
+import { buildSession, makePhraseQuestion, makeQuestion, phraseSession, segment, soundSession, toneSession } from '../js/exercises.js';
 import { strokeViewer, withStrokeCyr } from '../js/hanzi.js';
 import { INTERVALS, NEW_WORDS_PER_DAY, exportProgress, grade, importProgress, load, newWords, schedule, waitingWords } from '../js/progress.js';
 import { colorize, fallbackKeys, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
@@ -190,6 +190,68 @@ await test('звук на слух: правильный слог среди в�
   const s = soundSession(['ba1/pa1', 'ji1/qi1/xi1'], 6, seeded(4));
   eq(s.length, 6);
   for (const q of s) ok(q.options.includes(q.answer) && q.options.length >= 2, `вопрос ${JSON.stringify(q)}`);
+});
+
+await test('фраза делится на плитки по словам пиньиня', () => {
+  const show = (tokens) => tokens.map((t) => `${t.hz}:${t.py}`);
+  eq(show(segment('你叫什么名字？', 'Nǐ jiào shénme míngzi?')), ['你:nǐ', '叫:jiào', '什么:shénme', '名字:míngzi']);
+  eq(show(segment('我叫安娜。你呢？', 'Wǒ jiào Ānnà. Nǐ ne?')), ['我:wǒ', '叫:jiào', '安娜:Ānnà', '你:nǐ', '呢:ne']);
+  eq(show(segment('十二个月', "shí'èr ge yuè")), ["十二:shí'èr", '个:ge', '月:yuè']);
+  eq(show(segment('三百六十五', 'sānbǎi liùshíwǔ', '三 百 六 十 五')), ['三:sān', '百:bǎi', '六:liù', '十:shí', '五:wǔ']);
+  eq(show(segment('爸爸、妈妈和我。', 'Bàba, māma hé wǒ.')), ['爸爸:bàba', '妈妈:māma', '和:hé', '我:wǒ']);
+  eq(segment('你好', 'nǐ'), null);
+});
+
+await test('задания на фразы: сборка, пропуск, перевод на слух', () => {
+  const list = [
+    { hz: '我没有姐姐。', py: 'Wǒ méiyǒu jiějie.', ru: 'У меня нет старшей сестры.', gap: ['没有', '不有', '不是'] },
+    { hz: '你有妹妹吗？', py: 'Nǐ yǒu mèimei ma?', ru: 'У тебя есть младшая сестра?', gap: ['吗', '呢', '和'] },
+    { hz: '这是我爸爸。', py: 'Zhè shì wǒ bàba.', ru: 'Это мой папа.' },
+    { hz: '大家好！', py: 'Dàjiā hǎo!', ru: 'Всем привет!' },
+    { hz: '四十', py: 'sìshí', ru: '40' }, { hz: '十四', py: 'shísì', ru: '14' }, { hz: '一百', py: 'yìbǎi', ru: '100' },
+  ];
+  const rnd = seeded(5);
+  for (let n = 0; n < 20; n++) {
+    const b = makePhraseQuestion('build', list[0], list, rnd);
+    eq(b.bank.map((x) => x.hz).sort(), b.tokens.map((x) => x.hz).sort());
+    ok(b.bank.some((x, i) => x.hz !== b.tokens[i].hz), 'плитки лежат готовым ответом');
+  }
+  eq(makePhraseQuestion('build', list[3], list, rnd), null); // две плитки собирать незачем
+  const g = makePhraseQuestion('gap', list[1], list, rnd);
+  eq([g.tokens[g.at].hz, g.answer, [...g.options].sort()], ['吗', '吗', ['吗', '呢', '和'].sort()]);
+  eq(makePhraseQuestion('gap', list[2], list, rnd), null);
+  const l = makePhraseQuestion('listen', list[4], list, rnd);
+  ok(l.options.includes('40') && l.options.every((o) => /^\d+$/.test(o)), `числа сравниваются с числами: ${l.options}`);
+  const s = phraseSession(['build', 'gap', 'listen'], list, 9, rnd);
+  eq(s.length, 9);
+  eq(s.slice(0, 3).map((q) => q.type), ['build', 'gap', 'listen']);
+});
+
+await test('фразы уроков: делятся на плитки, пропуск совпадает с плиткой, серия набирается', async () => {
+  let blocks = 0;
+  for (const file of ['09-numbers', '10-greetings', '11-family', '12-final']) {
+    const doc = new DOMParser().parseFromString(await (await fetch(`../lessons/${file}.html`)).text(), 'text/html');
+    for (const el of doc.querySelectorAll('[data-exercises]')) {
+      const list = [...el.querySelectorAll('li[data-hz]')].map((li) => ({
+        hz: li.dataset.hz, py: li.dataset.py, ru: li.textContent.trim(), gap: li.dataset.gap?.split(' '), tiles: li.dataset.tiles,
+      }));
+      if (!list.length) continue;
+      blocks++;
+      for (const p of list) {
+        const tokens = segment(p.hz, p.py, p.tiles);
+        ok(tokens, `${file}: ${p.hz} не делится на плитки`);
+        if (p.gap) ok(tokens.some((x) => x.hz === p.gap[0]), `${file}: в ${p.hz} нет плитки ${p.gap[0]}`);
+        if (p.gap) eq(new Set(p.gap).size, p.gap.length);
+      }
+      eq(new Set(list.map((p) => p.ru)).size, list.length);
+      const count = Number(el.dataset.count);
+      const types = el.dataset.exercises.split(' ');
+      const s = phraseSession(types, list, count, seeded(6));
+      eq(s.length, count);
+      eq(new Set(s.map((q) => q.type)).size, types.length);
+    }
+  }
+  eq(blocks, 4);
 });
 
 await test('названия черт с русской транскрипцией', async () => {

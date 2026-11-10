@@ -1,6 +1,6 @@
 // Страница урока: шапка из course.json, карточки, справочник черт, проверки, практика, итог и навигация.
 import { charsOf, loadChars, loadLessons, loadStrokeTypes } from './data.js';
-import { buildSession, runner, soundSession, toneSession } from './exercises.js';
+import { buildSession, phraseSession, runner, soundSession, toneSession } from './exercises.js';
 import { charCard, enableCharPopups, framesStrip, linkHanzi, strokeTypeTable, viewerSlot, wordList } from './hanzi.js';
 import { completeLesson, load, saveScore } from './progress.js';
 import { h, initPage, pageUrl, shuffle } from './ui.js';
@@ -71,14 +71,21 @@ linkHanzi(document.querySelector('main'));
 
 // Практика: data-exercises="meaning char pinyin order write", "tone" с data-syllables или "sound" с data-sets.
 // data-from="earlier" — разминка по прошлым урокам, ее результат не сохраняется; data-from="all" — все знаки до урока.
+// Фразы: data-exercises="build gap listen" и список внутри блока:
+// <li data-hz="我没有姐姐。" data-py="Wǒ méiyǒu jiějie." data-gap="没有 不有 不是">У меня нет старшей сестры.</li>
 for (const el of document.querySelectorAll('[data-exercises]')) {
   const types = el.dataset.exercises.split(' ');
   const count = Number(el.dataset.count ?? 12);
   const warmup = el.dataset.from === 'earlier';
   const targets = { earlier: () => shuffle(earlier).slice(0, count), all: () => learned }[el.dataset.from]?.() ?? own;
+  const phrases = [...el.querySelectorAll('li[data-hz]')].map((li) => ({
+    hz: li.dataset.hz, py: li.dataset.py, ru: li.textContent.trim(), gap: li.dataset.gap?.split(' '), tiles: li.dataset.tiles,
+  }));
+  el.replaceChildren();
   const make = types[0] === 'tone' ? () => toneSession(el.dataset.syllables.split(' '), count)
     : types[0] === 'sound' ? () => soundSession(el.dataset.sets.split(' '), count)
-      : () => buildSession(types, warmup ? shuffle(earlier).slice(0, count) : targets, chars, learned, count);
+      : phrases.length ? () => phraseSession(types, phrases, count)
+        : () => buildSession(types, warmup ? shuffle(earlier).slice(0, count) : targets, chars, learned, count);
   el.append(runner(make, {
     chars,
     title: el.dataset.title ?? 'Практика',

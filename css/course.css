@@ -393,6 +393,16 @@ aside.note.culture::before { content: "🏮 Культура"; }
 .quiz-pic { width: 160px; height: 160px; margin: 0 auto; }
 .quiz-pic svg { display: block; width: 100%; height: 100%; }
 .quiz-write { width: 260px; max-width: 100%; aspect-ratio: 1; margin: 0 auto 12px; touch-action: none; }
+/* Задания на фразы: плитки слов */
+.tok { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-width: 46px; min-height: 58px; padding: 4px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); }
+button.tok { cursor: pointer; }
+button.tok:hover:not(:disabled) { border-color: var(--accent); }
+.tok-hz { font-size: 24px; line-height: 1.25; }
+.tok-py { font-size: 13px; line-height: 1.3; }
+.tok-gap { border-style: dashed; border-color: var(--accent); color: var(--accent); font-size: 24px; font-weight: 700; }
+.build-line, .build-bank, .gap-line { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0; }
+.build-line { min-height: 76px; padding: 8px; border-bottom: 2px solid var(--line); }
+.option-word { font-size: 24px; }
 .quiz-feedback { margin-top: 12px; padding: 12px 16px; border-radius: 12px; }
 .quiz-feedback.ok { background: var(--ok-soft); }
 .quiz-feedback.bad { background: var(--bad-soft); }

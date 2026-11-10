@@ -26,7 +26,7 @@ SAY = re.compile(r'data-(?:say|hz)="([^"]+)"')
 SYLLABLE = re.compile(r"^[a-zv]+[1-5]$")
 SYLLABLES = re.compile(r'data-(?:syllables|sets)="([^"]+)"')
 TAG = re.compile(r"<[^>]+>")
-ATTR = re.compile(r'(data-(?:hz|say|py))="([^"]*)"')
+ATTR = re.compile(r'(data-(?:hz|say|py|gap|tiles))="([^"]*)"')
 PHRASE_BREAK = re.compile(r"[,.!?;:，。！？；：、]")
 STAND_IN = "4123"  # легкий тон, которого нет в записях, заменяется тем же слогом с другим тоном
 TONE_MARKS = {"\u0304": 1, "\u0301": 2, "\u030c": 3, "\u0300": 4}
@@ -118,13 +118,13 @@ def load_json(name):
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
-def word_pairs(text):
-    """Пары (слово, пиньинь) из тегов с data-py, порядок атрибутов любой."""
+def word_tags(text):
+    """Атрибуты тегов со словом и пиньинем, порядок атрибутов любой: (слово, пиньинь, остальные атрибуты)."""
     for tag in TAG.findall(text):
         attrs = dict(ATTR.findall(tag))
         key = attrs.get("data-hz") or attrs.get("data-say")
         if key and "data-py" in attrs:
-            yield key, attrs["data-py"]
+            yield key, attrs["data-py"], attrs
 
 
 def fallback_keys(py):
@@ -207,7 +207,18 @@ def main():
 
     # Запасной вариант: слово без записи в браузере без китайского голоса звучит слогами носителя.
     words = [w[:2] for e in chars.values() for w in e.get("words", [])]
-    words += [pair for p, t in texts.items() if p.suffix == ".html" for pair in word_pairs(t)]
+    for p, t in texts.items():
+        if p.suffix != ".html":
+            continue
+        for hz, py, attrs in word_tags(t):
+            words.append((hz, py))
+            # Фразы делятся на плитки по слогам, поэтому знаков и слогов должно быть поровну.
+            if len(CJK.findall(hz)) != len(PINYIN_SYLLABLE.findall(py)):
+                errors.append(f"{p.name}: в «{hz}» число слогов не совпадает с числом знаков ({py})")
+            if "data-gap" in attrs and attrs["data-gap"].split()[0] not in hz:
+                errors.append(f"{p.name}: в «{hz}» нет слова для пропуска {attrs['data-gap'].split()[0]}")
+            if "data-tiles" in attrs and attrs["data-tiles"].replace(" ", "") != "".join(CJK.findall(hz)):
+                errors.append(f"{p.name}: плитки «{attrs['data-tiles']}» не складываются в «{hz}»")
     unrecorded = {ch: [numbered(e["pinyin"])] for ch, e in chars.items() if ch not in manifest["word"]}
     unrecorded |= {hz: fallback_keys(py) for hz, py in words if hz not in manifest["word"]}
 

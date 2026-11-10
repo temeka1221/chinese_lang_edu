@@ -1,7 +1,7 @@
 // Упражнения: генерация вопросов и прохождение серии.
 import { loadHanzi, loadStrokeTypes } from './data.js';
 import { createWriter, hzLinks, miniChar } from './hanzi.js';
-import { h, keyToPinyin, pinyinHtml, plain, say, sayButton, shuffle, toneOf, withTone } from './ui.js';
+import { h, keyToPinyin, pinyinHtml, plain, say, sayButton, shuffle, syllableSpans, toneOf, withTone } from './ui.js';
 
 const TONE_NAMES = { 1: 'ˉ ровный высокий', 2: 'ˊ восходящий', 3: 'ˇ низкий', 4: 'ˋ падающий' };
 
@@ -69,6 +69,75 @@ export function soundSession(sets, count, rnd = Math.random) {
   }), rnd);
 }
 
+// ---------- Фразы: чистые функции ----------
+
+const CJK = /[\u3400-\u4dbf\u4e00-\u9fff]/;
+
+// Фраза делится на плитки по словам пиньиня: «Nǐ jiào shénme míngzi?» -> 你 / 叫 / 什么 / 名字.
+// tiles задает свое деление («三 百 六 十 五»), когда плитки нужны мельче слов.
+// Заглавная буква в начале предложения убирается, иначе она выдает первую плитку.
+export function segment(hz, py, tiles) {
+  const chars = [...hz].filter((c) => CJK.test(c));
+  const spans = syllableSpans(py);
+  const sizes = tiles ? tiles.split(' ').map((g) => [...g].length)
+    : spans.reduce((acc, s) => (s.word ? [...acc, 1] : [...acc.slice(0, -1), acc.at(-1) + 1]), []);
+  if (chars.length !== spans.length || sizes.reduce((a, b) => a + b, 0) !== chars.length) return null;
+  let i = 0;
+  return sizes.map((n) => {
+    const part = spans.slice(i, i + n).map((s, k) => {
+      const text = s.start ? s.text[0].toLowerCase() + s.text.slice(1) : s.text;
+      return k && /^[aeo]/.test(plain(text)) ? `'${text}` : text; // shí'èr
+    });
+    const tile = { hz: chars.slice(i, i + n).join(''), py: part.join('') };
+    i += n;
+    return tile;
+  });
+}
+
+// Вопрос по фразе { hz, py, ru, gap, tiles }. list — все фразы блока, из них берутся неверные переводы.
+// gap — варианты для пропуска, первый из них верный и должен совпадать с одной из плиток.
+export function makePhraseQuestion(type, phrase, list, rnd = Math.random) {
+  const tokens = segment(phrase.hz, phrase.py, phrase.tiles);
+  if (!tokens) return null;
+  switch (type) {
+    case 'build': {
+      if (tokens.length < 3) return null;
+      let bank = shuffle(tokens, rnd);
+      if (bank.every((t, i) => t.hz === tokens[i].hz)) bank = [...bank.slice(1), bank[0]]; // плитки не лежат готовым ответом
+      return { type, phrase, tokens, bank };
+    }
+    case 'gap': {
+      const at = phrase.gap ? tokens.findIndex((t) => t.hz === phrase.gap[0]) : -1;
+      return at < 0 ? null : { type, phrase, tokens, at, options: shuffle(phrase.gap, rnd), answer: phrase.gap[0] };
+    }
+    case 'listen': {
+      // Числа сравниваются с числами, фразы с фразами.
+      const kind = (p) => /^\d+$/.test(p.ru);
+      const others = [...new Set(shuffle(list, rnd).filter((p) => p.ru !== phrase.ru && kind(p) === kind(phrase)).map((p) => p.ru))];
+      return others.length < 2 ? null : { type, phrase, options: shuffle([phrase.ru, ...others.slice(0, 3)], rnd), answer: phrase.ru };
+    }
+    default:
+      throw new Error(`неизвестный тип упражнения: ${type}`);
+  }
+}
+
+// Серия по фразам: типы по кругу, для каждого берется подходящая фраза, которая встречалась в серии реже других.
+export function phraseSession(types, phrases, count, rnd = Math.random) {
+  const order = shuffle(phrases, rnd);
+  const fits = Object.fromEntries(types.map((t) => [t, order.filter((p) => makePhraseQuestion(t, p, phrases, rnd))]));
+  const seen = new Map();
+  const times = (p) => seen.get(p) ?? 0;
+  const out = [];
+  for (let i = 0; out.length < count && i < count * 2; i++) {
+    const type = types[i % types.length];
+    const phrase = fits[type].reduce((best, p) => (best && times(best) <= times(p) ? best : p), null);
+    if (!phrase) continue;
+    seen.set(phrase, times(phrase) + 1);
+    out.push(makePhraseQuestion(type, phrase, phrases, rnd));
+  }
+  return out;
+}
+
 // ---------- Прохождение ----------
 
 // make() возвращает новый набор вопросов: так работает кнопка «Новая серия».
@@ -109,8 +178,8 @@ export function runner(make, { chars = {}, title = 'Практика', onFinish 
   function finish() {
     const score = (questions.length - wrong.length) / questions.length;
     onFinish?.(score);
-    const verdict = score >= 0.9 ? 'Отлично!' : score >= 0.7 ? 'Хорошо.' : 'Карточки урока стоит пересмотреть и пройти серию еще раз.';
-    const missed = [...new Set(wrong.map((q) => q.ch ?? keyToPinyin(q.key)))];
+    const verdict = score >= 0.9 ? 'Отлично!' : score >= 0.7 ? 'Хорошо.' : 'Материал урока стоит пересмотреть и пройти серию еще раз.';
+    const missed = [...new Set(wrong.map((q) => q.ch ?? q.phrase?.hz ?? keyToPinyin(q.key)))];
     root.replaceChildren(h('div', { class: 'quiz-result' },
       h('p', { class: 'quiz-score' }, `${questions.length - wrong.length} из ${questions.length}`),
       h('p', {}, verdict),
@@ -150,9 +219,54 @@ const charNote = (ch, e, wrong) => h('div', { class: 'quiz-note' },
   h('span', { lang: 'zh-CN', class: 'quiz-note-char' }, ch), ' ', span(pinyinHtml(e.pinyin)), ` — ${e.meaning} `, sayButton(ch, e.pinyin),
   wrong && e.mnemonic ? h('p', { class: 'muted', html: hzLinks(`Ассоциация: ${[e.mnemonic].flat()[0]}`) }) : null);
 
+// Плитка слова: знаки и пиньинь под ними.
+const tokParts = (t) => [h('span', { class: 'tok-hz', lang: 'zh-CN' }, t.hz), h('span', { class: 'tok-py', html: pinyinHtml(t.py) })];
+
+// Разбор фразы после ответа: любой знак открывает свой порядок черт.
+const phraseNote = (p) => h('div', { class: 'quiz-note' },
+  h('span', { class: 'quiz-note-char', html: hzLinks(p.hz) }), ' ', span(pinyinHtml(p.py)), ` — ${p.ru} `, sayButton(p.hz, p.py));
+
 async function render(q, box, chars, done) {
   const e = chars[q.ch];
   switch (q.type) {
+    case 'build': {
+      const line = h('div', { class: 'build-line', 'aria-label': 'Собранная фраза' });
+      const bank = h('div', { class: 'build-bank', 'aria-label': 'Слова' });
+      const check = h('button', { type: 'button', class: 'btn primary', disabled: true, onclick: () => {
+        const ok = [...line.children].map((b) => b.dataset.part).join('') === q.tokens.map((t) => t.hz).join('');
+        for (const b of line.children) b.disabled = true;
+        check.remove();
+        say(q.phrase.hz, q.phrase.py);
+        done(ok, phraseNote(q.phrase));
+      } }, 'Проверить');
+      // Нажатие переносит плитку в строку ответа, повторное возвращает ее обратно.
+      const move = (b) => {
+        (b.parentElement === bank ? line : bank).append(b);
+        check.disabled = bank.children.length > 0;
+      };
+      for (const t of q.bank) {
+        bank.append(h('button', { type: 'button', class: 'tok', 'data-part': t.hz, onclick: (ev) => move(ev.currentTarget) }, tokParts(t)));
+      }
+      box.append(h('p', {}, /^\d+$/.test(q.phrase.ru) ? `Число по-китайски: ${q.phrase.ru}` : `Фраза по-китайски: «${q.phrase.ru}»`),
+        line, bank, h('div', { class: 'quiz-actions' }, check));
+      break;
+    }
+    case 'gap':
+      box.append(h('p', {}, `Какое слово пропущено? «${q.phrase.ru}»`),
+        h('div', { class: 'gap-line' }, q.tokens.map((t, i) => (i === q.at
+          ? h('span', { class: 'tok tok-gap' }, '?')
+          : h('span', { class: 'tok' }, tokParts(t))))),
+        choices(q.options, q.answer, (w) => h('span', { lang: 'zh-CN', class: 'option-word' }, w),
+          (ok) => { say(q.phrase.hz, q.phrase.py); done(ok, phraseNote(q.phrase)); }));
+      break;
+    case 'listen': {
+      const play = () => say(q.phrase.hz, q.phrase.py);
+      box.append(h('p', {}, /^\d+$/.test(q.phrase.ru) ? 'Какое число звучит?' : 'Что значит эта фраза?'),
+        h('button', { type: 'button', class: 'btn say-big', onclick: play }, '🔊 Еще раз'),
+        choices(q.options, q.answer, (ru) => ru, (ok) => done(ok, phraseNote(q.phrase))));
+      play();
+      break;
+    }
     case 'meaning':
       box.append(h('p', {}, 'Что значит этот иероглиф?'), big(q.ch),
         choices(q.options, q.answer, (c) => chars[c].meaning, (ok) => done(ok, charNote(q.ch, e, !ok))));
