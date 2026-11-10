@@ -1,13 +1,14 @@
 // Главная: продолжение курса, карта уроков, перенос и сброс прогресса.
-import { loadChars, loadLessons } from './data.js';
-import { dueCards, exportProgress, importProgress, load, reset } from './progress.js';
+import { loadChars, loadLessons, loadWords } from './data.js';
+import { dueCards, exportProgress, importProgress, load, newWords, reset } from './progress.js';
 import { h, initPage, pageUrl, plural } from './ui.js';
 
 initPage();
 
-const [lessons, chars] = await Promise.all([loadLessons(), loadChars()]);
+const [lessons, chars, words] = await Promise.all([loadLessons(), loadChars(), loadWords()]);
 const state = load();
-const due = dueCards(state).length;
+// В счет идут карточки по расписанию и новые слова на сегодня.
+const due = dueCards(state).filter((k) => chars[k] || words.has(k)).length + newWords(words, state).length;
 const next = lessons.find((l) => !state.lessons[l.id]?.done);
 const hours = Math.round(lessons.reduce((sum, l) => sum + l.minutes, 0) / 60);
 const total = Object.keys(chars).length;

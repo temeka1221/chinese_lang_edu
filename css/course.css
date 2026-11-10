@@ -389,6 +389,7 @@ aside.note.culture::before { content: "🏮 Культура"; }
 .quiz-bar span { display: block; height: 100%; background: var(--accent); transition: width 0.3s; }
 .quiz-q > p:first-child { margin-top: 0; font-weight: 600; }
 .quiz-char { font-family: var(--font-kai); font-size: 88px; line-height: 1.1; text-align: center; }
+.quiz-word { font-size: 64px; }
 .quiz-pic { width: 160px; height: 160px; margin: 0 auto; }
 .quiz-pic svg { display: block; width: 100%; height: 100%; }
 .quiz-write { width: 260px; max-width: 100%; aspect-ratio: 1; margin: 0 auto 12px; touch-action: none; }

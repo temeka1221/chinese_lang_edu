@@ -26,5 +26,20 @@ export async function loadLessons() {
   return course.modules.flatMap((m, i) => m.lessons.map((l) => ({ ...l, module: m.title, moduleNo: i + 1 })));
 }
 
+// Слова из карточек, которые целиком состоят из знаков курса: Map «слово -> { pinyin, meaning, lesson }»
+// в порядке уроков. Урок слова — тот, где изучен его последний знак.
+export async function loadWords() {
+  const chars = await loadChars();
+  const words = new Map();
+  for (const e of Object.values(chars)) {
+    for (const [hz, pinyin, meaning] of e.words ?? []) {
+      const parts = [...hz];
+      if (words.has(hz) || chars[hz] || !parts.every((c) => chars[c])) continue;
+      words.set(hz, { pinyin, meaning, lesson: parts.map((c) => chars[c].lesson).sort().at(-1) });
+    }
+  }
+  return new Map([...words].sort(([, a], [, b]) => a.lesson.localeCompare(b.lesson)));
+}
+
 // Иероглифы урока в порядке chars.json.
 export const charsOf = (chars, lessonId) => Object.keys(chars).filter((ch) => chars[ch].lesson === lessonId);

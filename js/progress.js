@@ -4,6 +4,8 @@ const DAY = 86_400_000;
 
 // Коробки Лейтнера: через сколько дней карточка вернется из коробки 1, 2, 3, 4, 5.
 export const INTERVALS = [1, 3, 7, 14, 30];
+// Новые слова приходят в повторение понемногу.
+export const NEW_WORDS_PER_DAY = 10;
 
 const startOfDay = (t) => new Date(t).setHours(0, 0, 0, 0);
 
@@ -52,9 +54,21 @@ export function schedule(card, ok, now = Date.now()) {
   return { box, due: startOfDay(now) + INTERVALS[box - 1] * DAY };
 }
 
-export function grade(ch, ok, now = Date.now()) {
+const introducedToday = (s, now) => (s.intro?.day === startOfDay(now) ? s.intro.n : 0);
+
+// Слова пройденных уроков, которых еще нет в коробках. words — Map из loadWords(), порядок уроков сохраняется.
+export const waitingWords = (words, s = load()) =>
+  [...words.keys()].filter((w) => s.lessons[words.get(w).lesson]?.done && !s.cards[w]);
+
+// Новые слова на сегодня: не больше NEW_WORDS_PER_DAY в день.
+export const newWords = (words, s = load(), now = Date.now()) =>
+  waitingWords(words, s).slice(0, Math.max(0, NEW_WORDS_PER_DAY - introducedToday(s, now)));
+
+// Знаки попадают в коробки кнопкой «Урок пройден», слово — при первом ответе, и тогда оно идет в счет дня.
+export function grade(key, ok, now = Date.now()) {
   const s = load();
-  s.cards[ch] = schedule(s.cards[ch], ok, now);
+  if (!s.cards[key]) s.intro = { day: startOfDay(now), n: introducedToday(s, now) + 1 };
+  s.cards[key] = schedule(s.cards[key], ok, now);
   write(s);
 }
 

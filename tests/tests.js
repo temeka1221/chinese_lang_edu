@@ -1,8 +1,8 @@
 // Тесты логики курса. Открываются через сервер: http://localhost:8000/tests/
-import { loadChars, loadStrokeTypes } from '../js/data.js';
+import { loadChars, loadStrokeTypes, loadWords } from '../js/data.js';
 import { buildSession, makeQuestion, soundSession, toneSession } from '../js/exercises.js';
 import { strokeViewer, withStrokeCyr } from '../js/hanzi.js';
-import { INTERVALS, exportProgress, importProgress, load, schedule } from '../js/progress.js';
+import { INTERVALS, NEW_WORDS_PER_DAY, exportProgress, grade, importProgress, load, newWords, schedule, waitingWords } from '../js/progress.js';
 import { colorize, fallbackKeys, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
 
 const results = [];
@@ -118,6 +118,41 @@ await test('прогресс: файл выгружается и загружа�
 
 const chars = await loadChars();
 const pool = Object.keys(chars);
+
+await test('слова для повторения: только из знаков курса, урок по последнему знаку', async () => {
+  const words = await loadWords();
+  ok(words.size > 50, `слов мало: ${words.size}`);
+  for (const [hz, w] of words) {
+    ok([...hz].every((c) => chars[c]), `${hz}: есть знак вне курса`);
+    eq(w.lesson, [...hz].map((c) => chars[c].lesson).sort().at(-1));
+  }
+  eq(words.get('明天').lesson, '07');
+  eq([...words.values()].map((w) => w.lesson), [...words.values()].map((w) => w.lesson).sort());
+});
+
+await test('новые слова: из пройденных уроков, порция на день, счет сбрасывается назавтра', async () => {
+  const words = await loadWords();
+  const saved = exportProgress();
+  const now = new Date(2026, 9, 11, 15, 30).getTime();
+  const D = 86_400_000;
+  try {
+    importProgress(JSON.stringify({ lessons: {}, cards: {} }));
+    eq(newWords(words, load(), now), []);
+    importProgress(JSON.stringify({ lessons: { '02': { done: true }, '04': { done: true } }, cards: {} }));
+    const first = newWords(words, load(), now);
+    eq(first.length, NEW_WORDS_PER_DAY);
+    ok(first.every((w) => ['02', '04'].includes(words.get(w).lesson)), 'слово из непройденного урока');
+    eq(words.get(first[0]).lesson, '02');
+    grade(first[0], true, now);
+    eq(load().cards[first[0]].box, 1);
+    const rest = newWords(words, load(), now);
+    eq(rest.length, NEW_WORDS_PER_DAY - 1);
+    ok(!rest.includes(first[0]), 'слово из коробки снова пришло как новое');
+    eq(newWords(words, load(), now + D).length, Math.min(NEW_WORDS_PER_DAY, waitingWords(words).length));
+  } finally {
+    importProgress(saved);
+  }
+});
 
 await test('в вариантах есть правильный ответ и нет повторов', () => {
   const rnd = seeded(1);

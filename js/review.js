@@ -1,13 +1,14 @@
-// Повторение по коробкам Лейтнера: узнать знак или написать его по памяти.
-import { loadChars } from './data.js';
+// Повторение по коробкам Лейтнера: узнать знак или слово, написать знак по памяти.
+import { loadChars, loadWords } from './data.js';
 import { createWriter, enableCharPopups, hzLinks } from './hanzi.js';
-import { INTERVALS, dueCards, grade, load } from './progress.js';
+import { INTERVALS, dueCards, grade, load, newWords, waitingWords } from './progress.js';
 import { h, initPage, pinyinHtml, plural, say, sayButton, shuffle } from './ui.js';
 
 initPage();
 enableCharPopups();
 
-const chars = await loadChars();
+const [chars, words] = await Promise.all([loadChars(), loadWords()]);
+const entry = (key) => chars[key] ?? words.get(key);
 const root = document.querySelector('[data-review]');
 const boxes = document.querySelector('[data-boxes]');
 
@@ -21,32 +22,41 @@ function renderBoxes() {
 function startScreen(note) {
   renderBoxes();
   const s = load();
-  const due = dueCards(s).filter((ch) => chars[ch]);
+  const due = dueCards(s).filter(entry);
+  const fresh = newWords(words, s);
   const head = note ? h('p', { class: 'done-note' }, note) : null;
-  if (!Object.keys(s.cards).length) {
+  if (!Object.keys(s.cards).length && !fresh.length) {
     return root.replaceChildren(h('p', {}, 'Карточек пока нет. Они появляются после кнопки «Урок пройден» в конце урока.'));
   }
-  if (!due.length) {
-    const soon = Math.min(...Object.values(s.cards).map((c) => c.due));
+  if (!due.length && !fresh.length) {
+    // Слова сверх дневной порции ждут завтрашнего дня.
+    const soon = Math.min(...Object.values(s.cards).map((c) => c.due), ...(waitingWords(words, s).length ? [Date.now() + 86_400_000] : []));
     const date = new Date(soon).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
     return root.replaceChildren(head ?? '', h('p', {}, `На сегодня все повторено. Следующие карточки ждут ${date}.`));
   }
+  const parts = [
+    due.length ? `${due.length} ${plural(due.length, 'карточка', 'карточки', 'карточек')}` : null,
+    fresh.length ? `${fresh.length} ${plural(fresh.length, 'новое слово', 'новых слова', 'новых слов')}` : null,
+  ].filter(Boolean);
   root.replaceChildren(head ?? '',
-    h('p', {}, `К повторению: ${due.length} ${plural(due.length, 'карточка', 'карточки', 'карточек')}.`),
-    h('button', { type: 'button', class: 'btn primary', onclick: () => session(due) }, 'Начать'));
+    h('p', {}, `К повторению: ${parts.join(' и ')}.`),
+    h('button', { type: 'button', class: 'btn primary', onclick: () => session(due, fresh) }, 'Начать'));
 }
 
-function session(due) {
-  const queue = shuffle(due);
+// Сначала идут карточки по расписанию, за ними новые слова в порядке уроков.
+function session(due, fresh) {
+  const queue = [...shuffle(due), ...fresh];
+  const total = queue.length;
   const graded = new Set();
   let right = 0;
 
   const next = () => {
-    if (!queue.length) return startScreen(`Сессия завершена: с первого раза ${right} из ${due.length}.`);
+    if (!queue.length) return startScreen(`Сессия завершена: с первого раза ${right} из ${total}.`);
     const ch = queue.shift();
     const first = !graded.has(ch);
+    const card = load().cards[ch];
     // Знак, который уже удалось узнать, иногда предлагается написать по памяти.
-    const write = first && load().cards[ch].box >= 2 && Math.random() < 0.5;
+    const write = first && chars[ch] && card.box >= 2 && Math.random() < 0.5;
     const result = (ok) => {
       if (first) {
         graded.add(ch);
@@ -56,8 +66,8 @@ function session(due) {
       if (!ok) queue.push(ch); // ошибка: знак вернется в конце этой же сессии
       renderBoxes();
     };
-    const left = `Осталось: ${queue.length + 1}`;
-    (write ? writeCard : recallCard)(ch, chars[ch], left, result, next);
+    const left = `Осталось: ${queue.length + 1}${card ? '' : ' · новое слово'}`;
+    (write ? writeCard : recallCard)(ch, entry(ch), left, result, next);
   };
   next();
 }
@@ -65,7 +75,9 @@ function session(due) {
 const reveal = (ch, e) => h('div', { class: 'review-answer' },
   h('div', { class: 'card-py', html: pinyinHtml(e.pinyin) }, sayButton(ch, e.pinyin)),
   h('div', { class: 'card-meaning' }, e.meaning),
-  h('p', { class: 'muted', html: hzLinks(`Ассоциация: ${[e.mnemonic].flat()[0]}`) }),
+  chars[ch]
+    ? h('p', { class: 'muted', html: hzLinks(`Ассоциация: ${[e.mnemonic].flat()[0]}`) })
+    : h('p', { class: 'muted', html: hzLinks(`Знаки слова: ${[...ch].join(' ')}`) }), // каждый знак открывает свою карточку
   e.sound ? h('p', { class: 'muted', html: hzLinks(`Чтение: ${e.sound}`) }) : null);
 
 function recallCard(ch, e, left, result, next) {
@@ -79,7 +91,7 @@ function recallCard(ch, e, left, result, next) {
   answer.append(show);
   root.replaceChildren(h('div', { class: 'review-card' },
     h('p', { class: 'muted' }, `${left} · чтение и значение`),
-    h('div', { class: 'quiz-char', lang: 'zh-CN' }, ch),
+    h('div', { class: `quiz-char${chars[ch] ? '' : ' quiz-word'}`, lang: 'zh-CN' }, ch),
     answer));
   show.focus();
 }
