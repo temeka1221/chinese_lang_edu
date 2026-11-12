@@ -2,7 +2,7 @@
 import { loadChars, loadWords } from './data.js';
 import { createWriter, enableCharPopups, hzLinks } from './hanzi.js';
 import { INTERVALS, dueCards, grade, load, newWords, waitingWords } from './progress.js';
-import { h, initPage, pinyinHtml, plural, say, sayButton, shuffle } from './ui.js';
+import { h, initPage, pinyinHtml, plural, refreshBadge, say, sayButton, shuffle } from './ui.js';
 
 initPage();
 enableCharPopups();
@@ -13,6 +13,7 @@ const root = document.querySelector('[data-review]');
 const boxes = document.querySelector('[data-boxes]');
 
 function renderBoxes() {
+  refreshBadge();
   const cards = Object.values(load().cards);
   boxes.replaceChildren(...INTERVALS.map((days, i) => h('div', { class: 'box-stat' },
     h('b', {}, String(cards.filter((c) => c.box === i + 1).length)),

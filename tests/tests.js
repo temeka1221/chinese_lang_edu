@@ -2,7 +2,7 @@
 import { loadChars, loadStrokeTypes, loadWords } from '../js/data.js';
 import { buildSession, makePhraseQuestion, makeQuestion, phraseSession, segment, soundSession, toneSession } from '../js/exercises.js';
 import { strokeViewer, withStrokeCyr } from '../js/hanzi.js';
-import { INTERVALS, NEW_WORDS_PER_DAY, exportProgress, grade, importProgress, load, newWords, schedule, waitingWords } from '../js/progress.js';
+import { INTERVALS, NEW_WORDS_PER_DAY, exportProgress, grade, importProgress, load, newWords, savePlace, schedule, todayCount, waitingWords } from '../js/progress.js';
 import { colorize, fallbackKeys, keyToPinyin, numbered, pinyinHtml, plain, plural, toneOf, withTone } from '../js/ui.js';
 
 const results = [];
@@ -149,6 +149,12 @@ await test('новые слова: из пройденных уроков, по�
     eq(rest.length, NEW_WORDS_PER_DAY - 1);
     ok(!rest.includes(first[0]), 'слово из коробки снова пришло как новое');
     eq(newWords(words, load(), now + D).length, Math.min(NEW_WORDS_PER_DAY, waitingWords(words).length));
+    // счетчик на сегодня: карточки по расписанию и новые слова, без ключей, которых нет в курсе
+    importProgress(JSON.stringify({ lessons: { '02': { done: true } }, cards: { 一: { box: 1, due: now - D }, 人: { box: 2, due: now + D }, 龘: { box: 1, due: now - D } } }));
+    eq(todayCount(words, (k) => chars[k] || words.has(k), load(), now), 1 + 9);
+    // место чтения запоминается и не мешает отметкам урока
+    savePlace('02', 5);
+    eq(load().lessons['02'], { done: true, at: 5 });
   } finally {
     importProgress(saved);
   }

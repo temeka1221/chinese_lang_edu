@@ -130,6 +130,7 @@ html.ready .needs-server { display: none; }
 .topbar-links a { padding: 6px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 15px; }
 .topbar-links a:hover { color: var(--ink); background: var(--bg); }
 .topbar-links a[aria-current="page"] { color: var(--ink); background: var(--accent-soft); }
+.badge { display: inline-block; min-width: 18px; margin-left: 6px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; line-height: 18px; text-align: center; }
 
 /* Панель урока: оглавление, место чтения, показ пиньиня и перевода. На странице урока прилипает она, а не шапка. */
 body[data-lesson] .topbar { position: static; }

@@ -1,14 +1,14 @@
 // Главная: продолжение курса, карта уроков, перенос и сброс прогресса.
 import { loadChars, loadLessons, loadWords } from './data.js';
-import { dueCards, exportProgress, importProgress, load, newWords, reset } from './progress.js';
+import { saveOffline, savedAt, offlineSupported } from './offline.js';
+import { exportProgress, importProgress, load, reset, todayCount } from './progress.js';
 import { h, initPage, pageUrl, plural } from './ui.js';
 
 initPage();
 
 const [lessons, chars, words] = await Promise.all([loadLessons(), loadChars(), loadWords()]);
 const state = load();
-// В счет идут карточки по расписанию и новые слова на сегодня.
-const due = dueCards(state).filter((k) => chars[k] || words.has(k)).length + newWords(words, state).length;
+const due = todayCount(words, (k) => chars[k] || words.has(k), state);
 const next = lessons.find((l) => !state.lessons[l.id]?.done);
 const hours = Math.round(lessons.reduce((sum, l) => sum + l.minutes, 0) / 60);
 const total = Object.keys(chars).length;
@@ -67,3 +67,31 @@ document.querySelector('[data-reset]').addEventListener('click', () => {
     location.reload();
   }
 });
+
+// Копия курса на устройстве: кнопка скачивает все файлы, дальше копия обновляется сама раз в день.
+const offline = document.querySelector('[data-offline]');
+if (offlineSupported) {
+  const status = h('span', { class: 'muted' });
+  const button = h('button', { type: 'button', class: 'btn' });
+  const show = () => {
+    const at = savedAt();
+    button.textContent = at ? 'Обновить копию' : 'Сохранить курс на устройстве';
+    status.textContent = at ? `Копия от ${new Date(at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}: курс открывается без сети.` : '';
+  };
+  const run = async (quiet) => {
+    button.disabled = true;
+    try {
+      await saveOffline((done, total) => { if (!quiet) status.textContent = `Сохранено файлов: ${done} из ${total}`; });
+      show();
+    } catch {
+      if (!quiet) status.textContent = 'Сохранить не получилось: нет связи с сайтом. Копию можно сохранить позже.';
+    }
+    button.disabled = false;
+  };
+  button.addEventListener('click', () => run(false));
+  offline.append(button, ' ', status);
+  show();
+  if (savedAt() && Date.now() - savedAt() > 86_400_000 && navigator.onLine) run(true);
+} else {
+  offline.remove();
+}

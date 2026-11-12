@@ -73,6 +73,10 @@ export const waitingWords = (words, s = load()) =>
 export const newWords = (words, s = load(), now = Date.now()) =>
   waitingWords(words, s).slice(0, Math.max(0, NEW_WORDS_PER_DAY - introducedToday(s, now)));
 
+// Сколько карточек ждет сегодня: по расписанию и новые слова. known отсекает ключи, которых в курсе уже нет.
+export const todayCount = (words, known, s = load(), now = Date.now()) =>
+  dueCards(s, now).filter(known).length + newWords(words, s, now).length;
+
 // Знаки попадают в коробки кнопкой «Урок пройден», слово — при первом ответе, и тогда оно идет в счет дня.
 export function grade(key, ok, now = Date.now()) {
   const s = load();

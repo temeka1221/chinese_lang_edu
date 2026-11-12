@@ -9,6 +9,8 @@
 | Записи слогов | `data/audio/syl/` | [hugolpz/audio-cmn](https://github.com/hugolpz/audio-cmn), диктор Chen Wang | CC BY-SA |
 | Записи слов HSK | `data/audio/word/` | [hugolpz/audio-cmn](https://github.com/hugolpz/audio-cmn), диктор Yue Tan, записи сделаны в SWAC Recorder | CC BY-SA |
 
+Значок приложения в `icons/` нарисован по контурам знака 中 из hanzi-writer-data.
+
 Записи audio-cmn используются без изменений. Слова, для которых записи нет, озвучивает синтезатор речи браузера.
 
 Тексты уроков, карточки иероглифов и код курса написаны для этого репозитория.

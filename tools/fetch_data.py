@@ -20,6 +20,7 @@ DATA = ROOT / "data"
 HANZI_URL = "https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0.1/"
 AUDIO_URL = "https://raw.githubusercontent.com/hugolpz/audio-cmn/master/64k/"
 MISSING = ROOT / "tools" / "missing.json"
+OFFLINE = ROOT / "offline.json"
 
 CJK = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
 SAY = re.compile(r'data-(?:say|hz)="([^"]+)"')
@@ -138,6 +139,16 @@ def fallback_keys(py):
     return keys
 
 
+def write_offline_list():
+    """Список всех файлов сайта: по нему курс сохраняется на устройстве для работы без сети."""
+    found = [*ROOT.glob("*.html"), ROOT / "manifest.webmanifest", *ROOT.glob("lessons/*.html"), *ROOT.glob("css/*.css"),
+             *ROOT.glob("js/*.js"), *ROOT.glob("icons/*.png"), *ROOT.glob("vendor/**/*"), *DATA.rglob("*")]
+    files = sorted(p for p in found if p.is_file() and not p.name.startswith("."))
+    listing = {"files": [p.relative_to(ROOT).as_posix() for p in files]}
+    OFFLINE.write_text(json.dumps(listing, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    return len(files)
+
+
 def main():
     if "--refresh" not in sys.argv[1:] and MISSING.exists():
         known_missing.update(json.loads(MISSING.read_text(encoding="utf-8")))
@@ -250,6 +261,7 @@ def main():
         warnings.append(f"записи слогов, которые курсу не нужны: {' '.join(extra)}")
 
     print(f"Иероглифов в курсе: {len(chars)}, всего знаков с контурами: {len(strokes)}")
+    print(f"Файлов для работы без сети: {write_offline_list()}")
     print(f"Записей слов: {len(manifest['word'])}, слогов: {len(manifest['syl'])}")
     if missing_words:
         print(f"Без записи (озвучит браузер): {' '.join(missing_words)}")

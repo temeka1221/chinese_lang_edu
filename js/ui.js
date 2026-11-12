@@ -1,5 +1,6 @@
 // Общие помощники: разметка, пиньинь, звук, шапка сайта.
-import { dataUrl, loadAudioIndex } from './data.js';
+import { dataUrl, loadAudioIndex, loadChars, loadWords } from './data.js';
+import { todayCount } from './progress.js';
 
 export function h(tag, attrs = {}, ...children) {
   const el = document.createElement(tag);
@@ -213,14 +214,31 @@ export function toast(text) {
 
 const pageUrl = (file) => new URL(`../${file}`, import.meta.url).href;
 
+// Число карточек на сегодня рядом со ссылкой «Повторение».
+export async function refreshBadge() {
+  const link = document.querySelector('.topbar-links [data-review-link]');
+  const [chars, words] = await Promise.all([loadChars(), loadWords()]);
+  const n = todayCount(words, (k) => chars[k] || words.has(k));
+  link.querySelector('.badge')?.remove();
+  if (n) link.append(h('span', { class: 'badge', title: 'Карточек на сегодня' }, String(n)));
+}
+
 export function initPage() {
   document.documentElement.classList.add('ready');
   const here = location.href.split(/[?#]/)[0];
-  const link = (file, text) => h('a', { href: pageUrl(file), 'aria-current': here === pageUrl(file) ? 'page' : null }, text);
+  const link = (file, text, attrs) => h('a', { href: pageUrl(file), 'aria-current': here === pageUrl(file) ? 'page' : null, ...attrs }, text);
   document.body.prepend(h('nav', { class: 'topbar' },
     h('a', { class: 'brand', href: pageUrl('index.html') }, h('span', { class: 'brand-mark' }, '中'), h('span', { class: 'brand-text' }, 'Китайский с нуля')),
-    h('div', { class: 'topbar-links' }, link('index.html', 'Уроки'), link('dictionary.html', 'Словарь'), link('review.html', 'Повторение')),
+    h('div', { class: 'topbar-links' }, link('index.html', 'Уроки'), link('dictionary.html', 'Словарь'),
+      link('review.html', 'Повторение', { 'data-review-link': true })),
   ));
+  refreshBadge().catch(() => {});
+  // Курс ставится на телефон как приложение и открывается без сети: манифест, значок и служебный воркер.
+  document.head.append(
+    h('link', { rel: 'manifest', href: pageUrl('manifest.webmanifest') }),
+    h('link', { rel: 'apple-touch-icon', href: pageUrl('icons/icon-180.png') }),
+    h('meta', { name: 'theme-color', content: '#c8302c' }));
+  navigator.serviceWorker?.register(pageUrl('sw.js')).catch(() => {});
   for (const el of document.querySelectorAll('.py')) colorize(el);
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-say]');
