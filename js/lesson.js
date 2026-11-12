@@ -34,6 +34,10 @@ document.querySelector('.lesson-head').prepend(
 for (const el of document.querySelectorAll('[data-cards]')) {
   el.classList.add('cards');
   el.append(...await Promise.all((el.dataset.cards ? [...el.dataset.cards] : own).map((ch) => charCard(ch))));
+  if (!el.dataset.cards && own.length) {
+    el.after(h('p', { class: 'muted' }, h('a', { href: pageUrl(`sheets.html?lesson=${id}`) }, 'Прописи для знаков урока'),
+      ' — лист для письма от руки, печатается из браузера.'));
+  }
 }
 
 for (const el of document.querySelectorAll('[data-strokes]')) el.append(viewerSlot(el.dataset.strokes));

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Прописи · Китайский с нуля</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c8302c'/%3E%3Ctext x='16' y='24' font-size='22' text-anchor='middle' fill='white'%3E中%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/course.css">
+  <script src="vendor/hanzi-writer/hanzi-writer.min.js"></script>
+  <script type="module" src="js/sheets.js"></script>
+</head>
+<body>
+  <p class="needs-server">Интерактивная часть курса работает через локальный сервер. Он запускается из корня репозитория командой <code>python3 -m http.server 8000</code>, после чего курс открывается по адресу <code>http://localhost:8000</code>.</p>
+  <main>
+    <header class="no-print">
+      <h1>Прописи</h1>
+      <p>Листы для письма от руки, как в китайской школе: порядок черт, образец, серые знаки для обводки и пустые клетки. Лист печатается из браузера на бумаге A4 или сохраняется в PDF.</p>
+      <div class="sheet-controls">
+        <label>Урок <select data-lesson></select></label>
+        <label>Знаки <input type="text" lang="zh-CN" data-chars aria-label="Знаки для прописей"></label>
+        <button type="button" class="btn primary" data-print>Печать</button>
+      </div>
+      <p class="muted" data-note></p>
+    </header>
+    <div class="sheet" data-sheet></div>
+  </main>
+</body>
+</html>

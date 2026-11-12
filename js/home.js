@@ -22,6 +22,7 @@ document.querySelector('[data-continue]').append(
     : h('span', { class: 'done-note' }, 'Все уроки этапа пройдены!'),
   h('a', { class: 'btn', href: pageUrl('review.html') }, due ? `Повторение: ${due} ${plural(due, 'карточка', 'карточки', 'карточек')}` : 'Повторение'),
   h('a', { class: 'btn', href: pageUrl('dictionary.html') }, 'Словарь'),
+  h('a', { class: 'btn', href: pageUrl('sheets.html') }, 'Прописи'),
 );
 
 const map = document.querySelector('[data-map]');

@@ -557,6 +557,32 @@ button.tok:hover:not(:disabled) { border-color: var(--accent); }
   font-size: 15px;
 }
 
+/* Прописи: лист всегда светлый, как бумага */
+.sheet-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.sheet-controls label { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
+.sheet-controls select, .sheet-controls input { padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); font: inherit; }
+.sheet-controls input { width: 14em; max-width: 100%; }
+.sheet { --ink: #111; --accent: #c8302c; padding: 16px; border-radius: 8px; background: #fff; color: #111; }
+.sheet-title { margin: 0 0 12px; color: #666; font-size: 13px; }
+.sheet-char { margin-bottom: 16px; break-inside: avoid; }
+.sheet-head { margin-bottom: 4px; font-size: 14px; }
+.sheet-head b { font-size: 18px; }
+.sheet-head span { color: #666; }
+.sheet-frames { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 4px; }
+.sheet-frames svg { width: 34px; height: 34px; border: 1px solid #ccc; }
+.sheet-row { display: grid; grid-template-columns: repeat(10, 1fr); }
+.sheet-cell { display: block; width: 100%; aspect-ratio: 1; }
+.sheet-guides { fill: none; stroke: #c4c4c4; stroke-width: 1.5; stroke-dasharray: 8 8; }
+.sheet-box { fill: none; stroke: #888; stroke-width: 2; }
+.sheet-cell.trace .st-done { fill: #d2d2d2; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  .topbar, .no-print, .needs-server, .toast { display: none !important; }
+  body { background: #fff; }
+  main { max-width: none; padding: 0; }
+  .sheet { padding: 0; }
+}
+
 @media (max-width: 720px) {
   body { font-size: 16px; }
   .card { grid-template-columns: 1fr; padding: 16px; }
