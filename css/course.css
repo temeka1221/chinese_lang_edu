@@ -131,6 +131,47 @@ html.ready .needs-server { display: none; }
 .topbar-links a:hover { color: var(--ink); background: var(--bg); }
 .topbar-links a[aria-current="page"] { color: var(--ink); background: var(--accent-soft); }
 
+/* Панель урока: оглавление, место чтения, показ пиньиня и перевода. На странице урока прилипает она, а не шапка. */
+body[data-lesson] .topbar { position: static; }
+.lesson-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(var(--accent), var(--accent)) left bottom / var(--read, 0%) 2px no-repeat,
+    color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: 15px;
+}
+.lesson-bar-in { display: flex; align-items: center; gap: 8px; max-width: 900px; margin: 0 auto; padding: 4px 16px; }
+.toc { position: relative; flex: 1; min-width: 0; }
+.toc summary { padding: 6px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; list-style: none; }
+.toc summary::-webkit-details-marker { display: none; }
+.toc summary::before { content: "☰"; margin-right: 8px; color: var(--muted); }
+.toc-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: min(380px, calc(100vw - 32px));
+  max-height: 70vh;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+.toc-panel ol { margin: 0; padding-left: 28px; }
+.toc-panel a { display: block; padding: 6px 8px; border-radius: 8px; color: var(--ink); text-decoration: none; }
+.toc-panel a:hover { background: var(--bg); }
+.toc-panel a[aria-current] { background: var(--accent-soft); }
+.toc-home { color: var(--muted); }
+.view-toggle { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); cursor: pointer; font-size: 14px; white-space: nowrap; }
+.view-toggle[aria-pressed="false"] { color: var(--muted); text-decoration: line-through; }
+html.hide-py .words li:not(.shown) .word-py, html.hide-ru .words li:not(.shown) .word-ru { filter: blur(6px); cursor: pointer; user-select: none; }
+body[data-lesson] main > section { scroll-margin-top: 56px; }
+.resume { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: -24px 0 40px; padding: 12px 16px; border-radius: 12px; background: var(--accent-soft); }
+
 /* Раскладка */
 main { max-width: 900px; margin: 0 auto; padding: 24px 16px 64px; }
 main > section, main > header { margin-bottom: 40px; }

@@ -40,10 +40,19 @@ export function saveScore(lessonId, score) {
   write(s);
 }
 
+// Место чтения: номер раздела урока, на котором остановился читатель.
+export function savePlace(lessonId, at) {
+  const s = load();
+  (s.lessons[lessonId] ??= {}).at = at;
+  write(s);
+}
+
 // Урок пройден: его иероглифы попадают в первую коробку и вернутся завтра.
 export function completeLesson(lessonId, chars, now = Date.now()) {
   const s = load();
-  (s.lessons[lessonId] ??= {}).done = true;
+  const l = (s.lessons[lessonId] ??= {});
+  l.done = true;
+  delete l.at;
   for (const ch of chars) s.cards[ch] ??= { box: 1, due: startOfDay(now) + DAY };
   write(s);
 }

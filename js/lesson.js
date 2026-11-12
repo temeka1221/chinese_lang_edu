@@ -2,6 +2,7 @@
 import { charsOf, loadChars, loadLessons, loadStrokeTypes } from './data.js';
 import { buildSession, phraseSession, runner, soundSession, toneSession } from './exercises.js';
 import { charCard, enableCharPopups, framesStrip, linkHanzi, strokeTypeTable, viewerSlot, wordList } from './hanzi.js';
+import { lessonBar } from './lessonbar.js';
 import { completeLesson, load, saveScore } from './progress.js';
 import { h, initPage, pageUrl, shuffle } from './ui.js';
 
@@ -109,6 +110,8 @@ const navLink = (l, dir, cls) => l && h('a', { href: pageUrl(l.file), class: cls
   h('span', { class: 'dir' }, dir), `Урок ${Number(l.id)}. ${l.title}`);
 document.querySelector('main').append(h('nav', { class: 'lesson-nav' },
   navLink(prevLesson, '← Назад', 'prev') ?? h('span'), navLink(nextLesson, 'Дальше →', 'next')));
+
+lessonBar(id);
 
 // Переход по ссылке на карточку (#char-人) после того, как карточки построены.
 if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
