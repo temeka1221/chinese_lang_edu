@@ -157,7 +157,7 @@ await test('новые слова: из пройденных уроков, по�
 await test('в вариантах есть правильный ответ и нет повторов', () => {
   const rnd = seeded(1);
   for (const ch of pool) {
-    for (const type of ['meaning', 'char', 'pinyin', 'order']) {
+    for (const type of ['meaning', 'char', 'pinyin', 'hear', 'order']) {
       const q = makeQuestion(type, ch, chars, pool, rnd);
       if (!q) {
         ok(type === 'order' && chars[ch].strokes.length < 2, `${ch}, ${type}: вопрос не построен`);
@@ -166,6 +166,7 @@ await test('в вариантах есть правильный ответ и н
       ok(q.options.includes(q.answer), `${ch}, ${type}: нет правильного ответа`);
       eq(new Set(q.options).size, q.options.length);
       if (type === 'meaning') eq(new Set(q.options.map((c) => chars[c].meaning)).size, q.options.length);
+      if (type === 'hear') eq(new Set(q.options.map((c) => chars[c].pinyin)).size, 4); // на слух варианты различимы
       if (type === 'pinyin') {
         eq(q.options.length, 4);
         eq(q.answer, chars[ch].pinyin);
@@ -177,9 +178,9 @@ await test('в вариантах есть правильный ответ и н
 });
 
 await test('серия упражнений нужной длины', () => {
-  const s = buildSession(['meaning', 'char', 'pinyin', 'order', 'write'], pool, chars, pool, 12, seeded(2));
+  const s = buildSession(['meaning', 'char', 'pinyin', 'hear', 'order', 'write'], pool, chars, pool, 12, seeded(2));
   eq(s.length, 12);
-  ok(new Set(s.map((q) => q.type)).size === 5, 'в серии есть не все типы заданий');
+  ok(new Set(s.map((q) => q.type)).size === 6, 'в серии есть не все типы заданий');
 });
 
 await test('тон на слух: ответ берется из ключа', () => {

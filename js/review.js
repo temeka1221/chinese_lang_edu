@@ -66,8 +66,10 @@ function session(due, fresh) {
       if (!ok) queue.push(ch); // ошибка: знак вернется в конце этой же сессии
       renderBoxes();
     };
+    // Знакомое слово иногда приходит на слух, без знаков.
+    const byEar = first && !chars[ch] && card?.box >= 2 && Math.random() < 0.5;
     const left = `Осталось: ${queue.length + 1}${card ? '' : ' · новое слово'}`;
-    (write ? writeCard : recallCard)(ch, entry(ch), left, result, next);
+    (write ? writeCard : recallCard)(ch, entry(ch), left, result, next, byEar);
   };
   next();
 }
@@ -80,20 +82,24 @@ const reveal = (ch, e) => h('div', { class: 'review-answer' },
     : h('p', { class: 'muted', html: hzLinks(`Знаки слова: ${[...ch].join(' ')}`) }), // каждый знак открывает свою карточку
   e.sound ? h('p', { class: 'muted', html: hzLinks(`Чтение: ${e.sound}`) }) : null);
 
-function recallCard(ch, e, left, result, next) {
+function recallCard(ch, e, left, result, next, byEar = false) {
   const answer = h('div', {});
+  const written = h('div', { class: `quiz-char${chars[ch] ? '' : ' quiz-word'}`, lang: 'zh-CN' }, ch);
+  const face = byEar ? h('button', { type: 'button', class: 'btn say-big', onclick: () => say(ch, e.pinyin) }, '🔊 Еще раз') : written;
   const show = h('button', { type: 'button', class: 'btn primary', onclick: () => {
     say(ch, e.pinyin);
+    face.replaceWith(written);
     answer.replaceChildren(reveal(ch, e), h('div', { class: 'quiz-actions' },
       h('button', { type: 'button', class: 'btn', onclick: () => { result(false); next(); } }, 'Не вспомнилось'),
       h('button', { type: 'button', class: 'btn primary', onclick: () => { result(true); next(); } }, 'Вспомнилось')));
   } }, 'Ответ');
   answer.append(show);
   root.replaceChildren(h('div', { class: 'review-card' },
-    h('p', { class: 'muted' }, `${left} · чтение и значение`),
-    h('div', { class: `quiz-char${chars[ch] ? '' : ' quiz-word'}`, lang: 'zh-CN' }, ch),
+    h('p', { class: 'muted' }, `${left} · ${byEar ? 'слово на слух' : 'чтение и значение'}`),
+    face,
     answer));
   show.focus();
+  if (byEar) say(ch, e.pinyin);
 }
 
 function writeCard(ch, e, left, result, next) {

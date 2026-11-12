@@ -31,6 +31,15 @@ export function makeQuestion(type, ch, chars, pool, rnd = Math.random) {
         : [1, 2, 3, 4, ...(tone === 5 ? [5] : [])].map((t) => withTone(base, t));
       return { type, ch, options: shuffle(options, rnd), answer: withTone(base, tone) };
     }
+    case 'hear': {
+      // На слух: варианты читаются по-разному, первыми берутся созвучные (тот же слог в другом тоне, та же первая буква).
+      const base = plain(e.pinyin);
+      const far = (c) => (plain(chars[c].pinyin) === base ? 0 : plain(chars[c].pinyin)[0] === base[0] ? 1 : 2);
+      const heard = new Set([e.pinyin]);
+      const rest = shuffle(pool, rnd).sort((a, b) => far(a) - far(b))
+        .filter((c) => !heard.has(chars[c].pinyin) && heard.add(chars[c].pinyin)).slice(0, 3);
+      return rest.length ? { type, ch, options: shuffle([ch, ...rest], rnd), answer: ch } : null;
+    }
     case 'order': {
       const n = e.strokes.length;
       if (n < 2) return null;
@@ -280,6 +289,15 @@ async function render(q, box, chars, done) {
       box.append(h('p', {}, 'Как читается этот иероглиф?'), big(q.ch),
         choices(q.options, q.answer, (p) => p, (ok) => { say(q.ch, e.pinyin); done(ok, charNote(q.ch, e, !ok)); }));
       break;
+    case 'hear': {
+      const play = () => say(q.ch, e.pinyin);
+      box.append(h('p', {}, 'Какой знак звучит?'),
+        h('button', { type: 'button', class: 'btn say-big', onclick: play }, '🔊 Еще раз'),
+        choices(q.options, q.answer, (c) => h('span', { lang: 'zh-CN', class: 'option-char' }, c),
+          (ok) => done(ok, charNote(q.ch, e, !ok)), 'chars'));
+      play();
+      break;
+    }
     case 'order': {
       const [data, types] = await Promise.all([loadHanzi(q.ch), loadStrokeTypes()]);
       const name = e.strokes[q.k];
